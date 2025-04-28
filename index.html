@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo Just Dance</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #player-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #cancion-actual {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+    #globalPlayer {
+      width: 90%;
+      max-width: 400px;
+    }
+    .controles {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    #vistaSelector, #filtroJuego, #ordenar {
+      font-size: 16px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    #buscador {
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 250px;
+    }
+
+    /* Mostrar el total de canciones */
+    #totalCanciones {
+      font-size: 16px;
+      color: #555;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .catalogo.catalogo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .cancion-catalogo {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 250px;
+      padding: 15px;
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cancion-catalogo:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .cancion-catalogo img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .cancion-catalogo h3 {
+      min-height: 48px;
+      overflow: hidden;
+      margin: 10px 0 5px 0;
+      font-size: 18px;
+    }
+    .cancion-catalogo .artista {
+      min-height: 40px;
+      overflow: hidden;
+      margin: 5px 0 10px 0;
+      font-size: 16px;
+    }
+    .cancion-catalogo p {
+      margin: 2px 0;
+      font-size: 14px;
+    }
+    .cancion-catalogo p:last-of-type {
+      margin-bottom: 10px;
+    }
+    .btn-escuchar {
+      margin-top: auto;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      background-color: #df7414;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .btn-escuchar:hover {
+      background-color: #c65d0d;
+    }
+
+    .catalogo.catalogo-lista {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .cancion-lista {
+      background: white;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 1300px;
+      display: flex;
+      align-items: center;
+      text-align: left;
+      padding: 10px;
+      gap: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .cancion-lista:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .cancion-lista img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .info-cancion {
+      flex-grow: 1;
+    }
+    .info-cancion h3 {
+      margin: 0 0 5px 0;
+      font-size: 20px;
+      word-break: break-word;
+    }
+    .info-cancion .detalles {
+      font-size: 14px;
+      color: #555;
+    }
+    .play-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-play-lista {
+      background-color: #df7414;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+    .btn-play-lista:hover {
+      background-color: #c65d0d;
+    }
+
+    .sin-recurso {
+      color: #c00;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Catálogo de Canciones - Just Dance</h1>
+
+<div id="player-container">
+  <div id="cancion-actual"></div>
+  <audio id="globalPlayer" controls>
+    <source src="" type="audio/ogg">
+    Tu navegador no soporta audio.
+  </audio>
+</div>
+
+<div class="controles">
+  <select id="vistaSelector">
+    <option value="catalogo">Vista Catálogo</option>
+    <option value="lista">Vista Lista</option>
+  </select>
+
+  <input type="text" id="buscador" placeholder="🔍 Buscar canción o artista...">
+  
+  <!-- Filtro por Juego -->
+  <select id="filtroJuego">
+    <option value="">Todos los juegos</option>
+    <option value="Just Dance 1">Just Dance 1</option>
+    <option value="Just Dance 2">Just Dance 2</option>
+    <option value="Just Dance 3">Just Dance 3</option>
+    <option value="Just Dance 4">Just Dance 4</option>
+    <option value="Just Dance 2014">Just Dance 2014</option>
+    <option value="Just Dance 2015">Just Dance 2015</option>
+    <option value="Just Dance 2016">Just Dance 2016</option>
+    <option value="Just Dance 2017">Just Dance 2017</option>
+    <option value="Just Dance 2018">Just Dance 2018</option>
+    <option value="Just Dance 2019">Just Dance 2019</option>
+    <option value="Just Dance 2020">Just Dance 2020</option>
+    <option value="Just Dance Disney Party 1">Just Dance Disney Party 1</option>
+  </select>
+
+  <!-- Filtro de Ordenar -->
+  <select id="ordenar">
+    <option value="default">Orden Original</option>
+    <option value="cancion">Ordenar por Canción</option>
+    <option value="artista">Ordenar por Artista</option>
+    <option value="anio">Ordenar por Año</option>
+    <option value="dificultad">Ordenar por Dificultad</option>
+  </select>
+</div>
+
+<!-- Total de canciones -->
+<div id="totalCanciones"></div>
+
+<div class="catalogo" id="catalogo"></div>
+
+<script>
+let todasLasCanciones = [];
+
+fetch('canciones.json')
+  .then(response => response.json())
+  .then(data => {
+    todasLasCanciones = data;
+    const catalogo = document.getElementById('catalogo');
+    const vistaSelector = document.getElementById('vistaSelector');
+    const buscador = document.getElementById('buscador');
+    const filtroJuego = document.getElementById('filtroJuego');
+    const ordenar = document.getElementById('ordenar');
+    const totalCanciones = document.getElementById('totalCanciones');
+
+    function renderCatalogo(vista, filtro = '', filtroJuegoValor = '', ordenarPor = 'default') {
+      catalogo.innerHTML = '';
+      totalCanciones.textContent = `Total de canciones: ${todasLasCanciones.length}`;
+
+      catalogo.className = 'catalogo ' + (vista === 'lista' ? 'catalogo-lista' : 'catalogo-grid');
+
+      const cancionesFiltradas = todasLasCanciones.filter(cancion => 
+        cancion &&
+        typeof cancion.cancion === 'string' &&
+        typeof cancion.artista === 'string' &&
+        (
+          cancion.cancion.toLowerCase().includes(filtro.toLowerCase()) ||
+          cancion.artista.toLowerCase().includes(filtro.toLowerCase())
+        ) &&
+        (filtroJuegoValor === '' || cancion.juego === filtroJuegoValor)
+      );
+
+      // Ordenar
+      if (ordenarPor === 'default') {
+        // Mantener el orden original
+      } else if (ordenarPor === 'anio') {
+        cancionesFiltradas.sort((a, b) => a.anio - b.anio); // De más antiguo a más reciente
+      } else if (ordenarPor === 'dificultad') {
+        cancionesFiltradas.sort((a, b) => a.dificultad - b.dificultad); // De menor a mayor dificultad
+      } else {
+        cancionesFiltradas.sort((a, b) => {
+          const fieldA = a[ordenarPor].toLowerCase();
+          const fieldB = b[ordenarPor].toLowerCase();
+          if (fieldA < fieldB) return -1;
+          if (fieldA > fieldB) return 1;
+          return 0;
+        });
+      }
+
+      totalCanciones.textContent = `Total de canciones: ${cancionesFiltradas.length}`;
+
+      cancionesFiltradas.forEach(cancion => {
+        const card = document.createElement('div');
+        card.className = vista === 'lista' ? 'cancion-lista' : 'cancion-catalogo';
+
+        card.innerHTML += `
+          <img src="Portadas/${cancion.version}/${cancion.codigo}.webp" alt="${cancion.cancion}">
+        `;
+
+        if (vista === 'lista') {
+          card.innerHTML += `
+            <div class="info-cancion">
+              <h3>${cancion.cancion}</h3>
+              <div class="detalles">
+                ${cancion.artista} | ${cancion.anio || 'N/A'} | ${cancion.dificultad !== null ? '⭐'.repeat(cancion.dificultad) : 'Sin dificultad'} | ${cancion.juego}
+              </div>
+            </div>
+            <div class="play-container">
+              ${cancion.audioDisponible
+                ? `<button class="btn-play-lista" onclick="reproducirCancion('Musica/${cancion.version}/${cancion.codigo}.ogg', '${cancion.cancion}')">▶️</button>`
+                : `<div class="sin-recurso">Sin audio</div>`
+              }
+            </div>
+          `;
+        } else {
+          card.innerHTML += `
+            <h3>${cancion.cancion}</h3>
+            <p class="artista"><strong>Artista:</strong> <em>${cancion.artista}</em></p>
+            <p><strong>Año:</strong> ${cancion.anio || 'N/A'}</p>
+            <p><strong>Dificultad:</strong> ${cancion.dificultad !== null ? '⭐'.repeat(cancion.dificultad) : 'No especificada'}</p>
+            <p><strong>Juego:</strong> ${cancion.juego}</p>
+            ${cancion.audioDisponible
+              ? `<button class="btn-escuchar" onclick="reproducirCancion('Musica/${cancion.version}/${cancion.codigo}.ogg', '${cancion.cancion}')">▶️ Escuchar</button>`
+              : `<div class="sin-recurso">Audio no disponible</div>`
+            }
+          `;
+        }
+
+        catalogo.appendChild(card);
+      });
+    }
+
+    vistaSelector.addEventListener('change', (e) => {
+      renderCatalogo(e.target.value, buscador.value, filtroJuego.value, ordenar.value);
+    });
+
+    buscador.addEventListener('input', (e) => {
+      renderCatalogo(vistaSelector.value, e.target.value, filtroJuego.value, ordenar.value);
+    });
+
+    filtroJuego.addEventListener('change', (e) => {
+      renderCatalogo(vistaSelector.value, buscador.value, e.target.value, ordenar.value);
+    });
+
+    ordenar.addEventListener('change', (e) => {
+      renderCatalogo(vistaSelector.value, buscador.value, filtroJuego.value, e.target.value);
+    });
+
+    renderCatalogo('catalogo', '', '', 'default'); // Inicializa con todas las canciones ordenadas de forma predeterminada
+  })
+  .catch(error => {
+    console.error('Error cargando el catálogo:', error);
+  });
+
+function reproducirCancion(src, titulo) {
+  const player = document.getElementById('globalPlayer');
+  const tituloActual = document.getElementById('cancion-actual');
+  player.src = src;
+  player.play();
+  tituloActual.textContent = `🎵 Ahora suena: ${titulo}`;
+}
+</script>
+
+</body>
+</html>
