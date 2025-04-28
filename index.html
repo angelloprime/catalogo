@@ -296,7 +296,7 @@ fetch('canciones.json')
         card.className = vista === 'lista' ? 'cancion-lista' : 'cancion-catalogo';
 
         card.innerHTML += `
-          <img src="Portadas/${cancion.version}/${cancion.codigo}.webp" alt="${cancion.cancion}">
+          <img src="portadas/${cancion.version}/${cancion.codigo}.webp" alt="${cancion.cancion}">
         `;
 
         if (vista === 'lista') {
