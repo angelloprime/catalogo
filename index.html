@@ -309,7 +309,7 @@ fetch('canciones.json')
             </div>
             <div class="play-container">
               ${cancion.audioDisponible
-                ? `<button class="btn-play-lista" onclick="reproducirCancion('Musica/${cancion.version}/${cancion.codigo}.ogg', '${cancion.cancion}')">▶️</button>`
+                ? `<button class="btn-play-lista" onclick="reproducirCancion('musica/${cancion.version}/${cancion.codigo}.ogg', '${cancion.cancion}')">▶️</button>`
                 : `<div class="sin-recurso">Sin audio</div>`
               }
             </div>
@@ -322,7 +322,7 @@ fetch('canciones.json')
             <p><strong>Dificultad:</strong> ${cancion.dificultad !== null ? '⭐'.repeat(cancion.dificultad) : 'No especificada'}</p>
             <p><strong>Juego:</strong> ${cancion.juego}</p>
             ${cancion.audioDisponible
-              ? `<button class="btn-escuchar" onclick="reproducirCancion('Musica/${cancion.version}/${cancion.codigo}.ogg', '${cancion.cancion}')">▶️ Escuchar</button>`
+              ? `<button class="btn-escuchar" onclick="reproducirCancion('musica/${cancion.version}/${cancion.codigo}.ogg', '${cancion.cancion}')">▶️ Escuchar</button>`
               : `<div class="sin-recurso">Audio no disponible</div>`
             }
           `;
