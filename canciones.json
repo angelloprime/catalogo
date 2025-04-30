@@ -6728,8 +6728,8 @@
     "artista": "El Libro de la Selva",
     "anio": 1967,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_613",
@@ -6739,8 +6739,8 @@
     "artista": "La Bella y la Bestia",
     "anio": 1991,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_614",
@@ -6750,8 +6750,8 @@
     "artista": "Cenicienta",
     "anio": 1950,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_615",
@@ -6761,8 +6761,8 @@
     "artista": "Programa de Talentos",
     "anio": 2011,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_616",
@@ -6772,8 +6772,8 @@
     "artista": "Los Hechiceros de Waverly Place",
     "anio": 2007,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_617",
@@ -6783,8 +6783,8 @@
     "artista": "Los Aristogatos",
     "anio": 1970,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_618",
@@ -6794,8 +6794,8 @@
     "artista": "Tinker Bell",
     "anio": 2008,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_619",
@@ -6805,8 +6805,8 @@
     "artista": "Peter Pan",
     "anio": 1953,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_620",
@@ -6816,8 +6816,8 @@
     "artista": "Buena Suerte Charlie",
     "anio": 2010,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_621",
@@ -6827,8 +6827,8 @@
     "artista": "Lilo & Stitch",
     "anio": 2002,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_622",
@@ -6838,8 +6838,8 @@
     "artista": "Jessie",
     "anio": 2011,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_623",
@@ -6849,8 +6849,8 @@
     "artista": "Hannah Montana: La Película",
     "anio": 2009,
     "dificultad": 3,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_624",
@@ -6860,8 +6860,8 @@
     "artista": "Bolt",
     "anio": 2008,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_625",
@@ -6871,8 +6871,8 @@
     "artista": "It's a Small World",
     "anio": 1939,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_626",
@@ -6882,8 +6882,8 @@
     "artista": "Enredados",
     "anio": 2010,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_627",
@@ -6893,8 +6893,8 @@
     "artista": "Los Muppets",
     "anio": 1976,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_628",
@@ -6904,8 +6904,8 @@
     "artista": "A Todo Ritmo",
     "anio": 2010,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_629",
@@ -6915,8 +6915,8 @@
     "artista": "Phineas and Ferb",
     "anio": 2008,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_630",
@@ -6926,8 +6926,8 @@
     "artista": "Enredados",
     "anio": 2010,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_631",
@@ -6937,8 +6937,8 @@
     "artista": "Mary Poppins",
     "anio": 1964,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_632",
@@ -6948,8 +6948,8 @@
     "artista": "Encantada",
     "anio": 2007,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_633",
@@ -6959,8 +6959,8 @@
     "artista": "Camp Rock",
     "anio": 2008,
     "dificultad": 1,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_634",
@@ -6970,8 +6970,8 @@
     "artista": "A Todo Ritmo",
     "anio": 2010,
     "dificultad": 3,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_635",
@@ -6981,8 +6981,8 @@
     "artista": "La Sirenita",
     "anio": 1989,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   },
   {
     "codigo": "JDDP1_636",
@@ -6992,7 +6992,7 @@
     "artista": "High School Musical",
     "anio": 2006,
     "dificultad": 2,
-    "audioDisponible": true,
-    "portadaDisponible": false
+    "audioDisponible": false,
+    "portadaDisponible": true
   }
 ]
