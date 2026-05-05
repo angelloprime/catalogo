@@ -1,131 +1,155 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Ruleta Just Dance</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Ruleta Just Dance PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #1e1e2f, #2c2c54);
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
+<style>
+body {
+  background: radial-gradient(circle at top, #1f1f2e, #0f0f18);
+  color: white;
+  padding: 20px;
+}
 
-    h1 {
-      margin-bottom: 20px;
-    }
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-    .ruleta-container {
-      position: relative;
-      margin: 40px auto;
-      width: 300px;
-      height: 300px;
-    }
+/* RUEDA */
+.ruleta-container {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  margin: auto;
+}
 
-    .ruleta {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 10px solid white;
-      position: relative;
-      overflow: hidden;
-      transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
-    }
+.ruleta {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 8px solid white;
+  overflow: hidden;
+  transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
 
-    .segmento {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      transform-origin: 100% 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      text-align: center;
-      padding: 5px;
-    }
+.segmento {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  transform-origin: 100% 100%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .flecha {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 30px;
-    }
+.flecha {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 35px;
+}
 
-    .resultado {
-      margin-top: 20px;
-    }
+/* PANEL DERECHO */
+.panel {
+  text-align: center;
+}
 
-    .resultado img {
-      width: 150px;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
+.portada {
+  width: 200px;
+  border-radius: 15px;
+  margin-top: 10px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
 
-    button {
-      margin-top: 20px;
-    }
-  </style>
+.btn-girar {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+/* animación glow */
+@keyframes glow {
+  0% { box-shadow: 0 0 10px #fff; }
+  50% { box-shadow: 0 0 25px #ff9800; }
+  100% { box-shadow: 0 0 10px #fff; }
+}
+
+.activa {
+  animation: glow 1s infinite;
+}
+</style>
 </head>
 
 <body>
 
-<h1>🎡 Ruleta Just Dance</h1>
+<h1>🎡 Ruleta Just Dance PRO</h1>
 
 <div class="container">
+  <div class="row">
 
-  <select id="selectorJuego" class="form-select w-50 mx-auto">
-    <option value="">Selecciona un juego</option>
-  </select>
+    <!-- IZQUIERDA -->
+    <div class="col-md-6 text-center">
+      <select id="selectorJuego" class="form-select mb-3">
+        <option value="">Selecciona un juego</option>
+      </select>
 
-  <div class="ruleta-container">
-    <div class="flecha">▼</div>
-    <div class="ruleta" id="ruleta"></div>
+      <div class="ruleta-container">
+        <div class="flecha">▼</div>
+        <div class="ruleta" id="ruleta"></div>
+      </div>
+
+      <button class="btn btn-warning btn-girar" onclick="girar()">GIRAR</button>
+    </div>
+
+    <!-- DERECHA -->
+    <div class="col-md-6 panel">
+      <h2 id="nombre">🎶 Esperando...</h2>
+      <p id="artista"></p>
+      <img id="portada" class="portada" src="portadas/default.webp">
+
+      <audio id="player" controls class="mt-3 w-100"></audio>
+
+      <p class="mt-3">Historial: <span id="historialCount">0</span></p>
+    </div>
+
   </div>
-
-  <button class="btn btn-warning" onclick="girar()">Girar</button>
-
-  <div class="resultado" id="resultado"></div>
-
 </div>
 
 <script>
 let canciones = [];
-let cancionesFiltradas = [];
+let filtradas = [];
+let historial = [];
 let rotacion = 0;
 
-// Cargar JSON
+// cargar JSON
 fetch('canciones.json')
-  .then(res => res.json())
-  .then(data => {
-    canciones = data;
-    cargarJuegos();
-  });
+.then(r => r.json())
+.then(data => {
+  canciones = data;
+  cargarJuegos();
+});
 
 function cargarJuegos() {
   const selector = document.getElementById('selectorJuego');
-  const juegosUnicos = [...new Set(canciones.map(c => c.juego))];
+  const juegos = [...new Set(canciones.map(c => c.juego))];
 
-  juegosUnicos.forEach(juego => {
-    const option = document.createElement('option');
-    option.value = juego;
-    option.textContent = juego;
-    selector.appendChild(option);
+  juegos.forEach(j => {
+    let opt = document.createElement('option');
+    opt.value = j;
+    opt.textContent = j;
+    selector.appendChild(opt);
   });
 }
 
-// Cuando cambia el juego
-document.getElementById('selectorJuego').addEventListener('change', function() {
-  const juego = this.value;
-
-  cancionesFiltradas = canciones.filter(c => c.juego === juego);
-
+document.getElementById('selectorJuego').addEventListener('change', e => {
+  filtradas = canciones.filter(c => c.juego === e.target.value && c.audioDisponible);
+  historial = [];
   crearRuleta();
 });
 
@@ -133,51 +157,67 @@ function crearRuleta() {
   const ruleta = document.getElementById('ruleta');
   ruleta.innerHTML = "";
 
-  const total = cancionesFiltradas.length;
-  const angulo = 360 / total;
+  let total = filtradas.length;
+  let angulo = 360 / total;
 
-  cancionesFiltradas.forEach((cancion, i) => {
-    const segmento = document.createElement('div');
-    segmento.className = 'segmento';
+  filtradas.forEach((c, i) => {
+    let seg = document.createElement('div');
+    seg.className = "segmento";
 
-    segmento.style.transform = `
-      rotate(${i * angulo}deg) skewY(${90 - angulo}deg)
-    `;
+    seg.style.transform = `rotate(${i * angulo}deg) skewY(${90 - angulo}deg)`;
+    seg.style.background = i % 2 ? "#ff9800" : "#03a9f4";
 
-    segmento.style.background = i % 2 === 0 ? '#ff7675' : '#74b9ff';
-
-    segmento.innerHTML = `<span style="transform: skewY(${-(90 - angulo)}deg) rotate(${angulo/2}deg)">
-      ${cancion.cancion}
+    seg.innerHTML = `<span style="transform: skewY(${-(90 - angulo)}deg) rotate(${angulo/2}deg)">
+      ${c.cancion}
     </span>`;
 
-    ruleta.appendChild(segmento);
+    ruleta.appendChild(seg);
   });
 }
 
 function girar() {
-  if (cancionesFiltradas.length === 0) return;
+  if (filtradas.length === 0) return;
 
   const ruleta = document.getElementById('ruleta');
-  const resultadoDiv = document.getElementById('resultado');
 
-  const randomIndex = Math.floor(Math.random() * cancionesFiltradas.length);
-  const angulo = 360 / cancionesFiltradas.length;
+  // reset si ya salieron todas
+  if (historial.length === filtradas.length) {
+    historial = [];
+  }
 
-  const grados = 3600 + (360 - (randomIndex * angulo));
+  let disponibles = filtradas.filter(c => !historial.includes(c.codigo));
+
+  let random = disponibles[Math.floor(Math.random() * disponibles.length)];
+  let index = filtradas.indexOf(random);
+
+  historial.push(random.codigo);
+  document.getElementById('historialCount').textContent = historial.length;
+
+  let angulo = 360 / filtradas.length;
+  let grados = 3600 + (360 - index * angulo);
+
   rotacion += grados;
-
+  ruleta.classList.add("activa");
   ruleta.style.transform = `rotate(${rotacion}deg)`;
 
-  const cancion = cancionesFiltradas[randomIndex];
-
   setTimeout(() => {
-    resultadoDiv.innerHTML = `
-      <h3>${cancion.cancion}</h3>
-      <p>${cancion.artista}</p>
-      <img src="portadas/${cancion.version}/${cancion.codigo}.webp"
-           onerror="this.src='portadas/default.webp'">
-    `;
+    ruleta.classList.remove("activa");
+
+    mostrarResultado(random);
   }, 4000);
+}
+
+function mostrarResultado(c) {
+  document.getElementById('nombre').textContent = c.cancion;
+  document.getElementById('artista').textContent = c.artista;
+
+  const portada = document.getElementById('portada');
+  portada.src = `portadas/${c.version}/${c.codigo}.webp`;
+  portada.onerror = () => portada.src = 'portadas/default.webp';
+
+  const player = document.getElementById('player');
+  player.src = `musica/${c.version}/${c.codigo}.ogg`;
+  player.play().catch(()=>{});
 }
 </script>
 
