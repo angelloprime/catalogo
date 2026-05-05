@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ruleta Just Dance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e1e2f, #2c2c54);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .ruleta-container {
+      position: relative;
+      margin: 40px auto;
+      width: 300px;
+      height: 300px;
+    }
+
+    .ruleta {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 10px solid white;
+      position: relative;
+      overflow: hidden;
+      transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .segmento {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      transform-origin: 100% 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      text-align: center;
+      padding: 5px;
+    }
+
+    .flecha {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 30px;
+    }
+
+    .resultado {
+      margin-top: 20px;
+    }
+
+    .resultado img {
+      width: 150px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🎡 Ruleta Just Dance</h1>
+
+<div class="container">
+
+  <select id="selectorJuego" class="form-select w-50 mx-auto">
+    <option value="">Selecciona un juego</option>
+  </select>
+
+  <div class="ruleta-container">
+    <div class="flecha">▼</div>
+    <div class="ruleta" id="ruleta"></div>
+  </div>
+
+  <button class="btn btn-warning" onclick="girar()">Girar</button>
+
+  <div class="resultado" id="resultado"></div>
+
+</div>
+
+<script>
+let canciones = [];
+let cancionesFiltradas = [];
+let rotacion = 0;
+
+// Cargar JSON
+fetch('canciones.json')
+  .then(res => res.json())
+  .then(data => {
+    canciones = data;
+    cargarJuegos();
+  });
+
+function cargarJuegos() {
+  const selector = document.getElementById('selectorJuego');
+  const juegosUnicos = [...new Set(canciones.map(c => c.juego))];
+
+  juegosUnicos.forEach(juego => {
+    const option = document.createElement('option');
+    option.value = juego;
+    option.textContent = juego;
+    selector.appendChild(option);
+  });
+}
+
+// Cuando cambia el juego
+document.getElementById('selectorJuego').addEventListener('change', function() {
+  const juego = this.value;
+
+  cancionesFiltradas = canciones.filter(c => c.juego === juego);
+
+  crearRuleta();
+});
+
+function crearRuleta() {
+  const ruleta = document.getElementById('ruleta');
+  ruleta.innerHTML = "";
+
+  const total = cancionesFiltradas.length;
+  const angulo = 360 / total;
+
+  cancionesFiltradas.forEach((cancion, i) => {
+    const segmento = document.createElement('div');
+    segmento.className = 'segmento';
+
+    segmento.style.transform = `
+      rotate(${i * angulo}deg) skewY(${90 - angulo}deg)
+    `;
+
+    segmento.style.background = i % 2 === 0 ? '#ff7675' : '#74b9ff';
+
+    segmento.innerHTML = `<span style="transform: skewY(${-(90 - angulo)}deg) rotate(${angulo/2}deg)">
+      ${cancion.cancion}
+    </span>`;
+
+    ruleta.appendChild(segmento);
+  });
+}
+
+function girar() {
+  if (cancionesFiltradas.length === 0) return;
+
+  const ruleta = document.getElementById('ruleta');
+  const resultadoDiv = document.getElementById('resultado');
+
+  const randomIndex = Math.floor(Math.random() * cancionesFiltradas.length);
+  const angulo = 360 / cancionesFiltradas.length;
+
+  const grados = 3600 + (360 - (randomIndex * angulo));
+  rotacion += grados;
+
+  ruleta.style.transform = `rotate(${rotacion}deg)`;
+
+  const cancion = cancionesFiltradas[randomIndex];
+
+  setTimeout(() => {
+    resultadoDiv.innerHTML = `
+      <h3>${cancion.cancion}</h3>
+      <p>${cancion.artista}</p>
+      <img src="portadas/${cancion.version}/${cancion.codigo}.webp"
+           onerror="this.src='portadas/default.webp'">
+    `;
+  }, 4000);
+}
+</script>
+
+</body>
+</html>
