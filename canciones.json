@@ -1030,7 +1030,7 @@
     "artista": "Sweat Invaders",
     "anio": 2008,
     "dificultad": 1,
-    "audioDisponible": false,
+    "audioDisponible": true,
     "portadaDisponible": true
   },
   {
@@ -1800,7 +1800,7 @@
     "artista": "Sweat Invaders",
     "anio": 2008,
     "dificultad": 1,
-    "audioDisponible": false,
+    "audioDisponible": true,
     "portadaDisponible": true
   },
   {
