@@ -9,160 +9,132 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-
-body{
-    margin:0;
-    overflow:hidden;
-    background:#050510;
-    color:white;
-    font-family:Arial;
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #050510;
+    color: white;
+    font-family: Arial;
 }
 
-h1{
-    text-align:center;
-    margin-top:20px;
-    font-weight:bold;
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
 }
 
-.main{
-    padding:20px;
+.main {
+    padding: 20px;
 }
 
-.panel{
-    background:rgba(255,255,255,0.05);
-    border-radius:25px;
-    padding:25px;
-    backdrop-filter:blur(10px);
+.panel {
+    background: rgba(255,255,255,0.05);
+    border-radius: 25px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
 }
 
-.btn-spin{
-    font-size:22px;
-    padding:15px 35px;
-    border-radius:15px;
-    font-weight:bold;
+.btn-spin {
+    font-size: 22px;
+    padding: 15px 35px;
+    border-radius: 15px;
+    font-weight: bold;
 }
 
-.result-img{
-    width:320px;
-    max-width:100%;
-    border-radius:20px;
-    box-shadow:
+.result-img {
+    width: 320px;
+    max-width: 100%;
+    border-radius: 20px;
+    box-shadow: 
         0 0 20px rgba(255,255,255,0.2),
         0 0 50px rgba(255,170,0,0.25);
 }
 
 /* OVERLAY */
-
-.overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.95);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    opacity:0;
-    pointer-events:none;
-    transition:0.4s;
-    z-index:9999;
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.4s;
+    z-index: 9999;
 }
 
-.overlay.active{
-    opacity:1;
-    pointer-events:all;
+.overlay.active {
+    opacity: 1;
+    pointer-events: all;
 }
 
 /* ESCENA */
-
-.scene{
-    width:100vw;
-    height:100vh;
-    perspective:1800px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.scene {
+    width: 100vw;
+    height: 100vh;
+    perspective: 1800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* RULETA */
-
-.carousel{
-    position:relative;
-
-    width:500px;
-    height:500px;
-
-    transform-style:preserve-3d;
-
-    transition:
-        transform 12s cubic-bezier(0.08,0.82,0.17,1);
-
+.carousel {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    transform-style: preserve-3d;
+    transition: transform 12s cubic-bezier(0.08,0.82,0.17,1);
 }
 
 /* CARTAS */
-
-.card{
-    position:absolute;
-
-    width:220px;
-    height:300px;
-
-    left:140px;
-    top:100px;
-
-    border-radius:20px;
-    overflow:hidden;
-
-    background:#111;
-
-    border:3px solid rgba(255,255,255,0.12);
-
-    box-shadow:
+.card {
+    position: absolute;
+    width: 220px;
+    height: 300px;
+    left: 140px;
+    top: 100px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #111;
+    border: 3px solid rgba(255,255,255,0.12);
+    box-shadow: 
         0 10px 30px rgba(0,0,0,0.6),
         0 0 25px rgba(255,255,255,0.12);
-
-    transform-style:preserve-3d;
+    transform-style: preserve-3d;
 }
 
-.card img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.card .title{
-    position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
-
-    padding:8px;
-
-    background:rgba(0,0,0,0.7);
-
-    text-align:center;
-    font-size:12px;
-    font-weight:bold;
+.card .title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    background: rgba(0,0,0,0.7);
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 /* FLECHA */
-
-.pointer{
-    position:absolute;
-
-    top:30px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    font-size:70px;
-
-    z-index:50;
-
-    text-shadow:
+.pointer {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 70px;
+    z-index: 50;
+    text-shadow: 
         0 0 20px white,
         0 0 35px orange;
 }
-
 </style>
 </head>
 <body>
@@ -170,283 +142,155 @@ h1{
 <h1>🎡 Ruleta 3D Just Dance</h1>
 
 <div class="container main">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="panel text-center">
+                <select id="gameSelect" class="form-select mb-4">
+                    <option value="">Selecciona un juego</option>
+                </select>
+                <button class="btn btn-warning btn-spin" onclick="spin()">
+                    🎡 GIRAR
+                </button>
+            </div>
+        </div>
 
-<div class="row g-4">
-
-<div class="col-lg-4">
-
-<div class="panel text-center">
-
-<select id="gameSelect" class="form-select mb-4">
-<option value="">Selecciona un juego</option>
-</select>
-
-<button
-class="btn btn-warning btn-spin"
-onclick="spin()">
-🎡 GIRAR
-</button>
-
-</div>
-
-</div>
-
-<div class="col-lg-8">
-
-<div class="panel text-center">
-
-<h2 id="songName">
-🎶 Esperando canción...
-</h2>
-
-<p id="artist"></p>
-
-<img
-id="cover"
-class="result-img"
-src="portadas/default.webp">
-
-<audio
-id="audio"
-controls
-class="w-100 mt-4">
-</audio>
-
-<div class="mt-4">
-<strong>Historial:</strong>
-<span id="historyCount">0</span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+        <div class="col-lg-8">
+            <div class="panel text-center">
+                <h2 id="songName">🎶 Esperando canción...</h2>
+                <p id="artist"></p>
+                <img id="cover" class="result-img" src="portadas/default.webp">
+                <audio id="audio" controls class="w-100 mt-4"></audio>
+                <div class="mt-4">
+                    <strong>Historial:</strong>
+                    <span id="historyCount">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- OVERLAY -->
-
 <div id="overlay" class="overlay">
-
-<div class="pointer">▼</div>
-
-<div class="scene">
-
-<div id="carousel" class="carousel"></div>
-
-</div>
-
+    <div class="pointer">▼</div>
+    <div class="scene">
+        <div id="carousel" class="carousel"></div>
+    </div>
 </div>
 
 <script>
-
 let songs = [];
 let filtered = [];
 let history = [];
-
 let currentRotation = 0;
 
 fetch('canciones.json')
-.then(r => r.json())
-.then(data => {
-
-    songs = data;
-
-    loadGames();
-
-});
-
-function loadGames(){
-
-    const select =
-        document.getElementById('gameSelect');
-
-    const games =
-        [...new Set(songs.map(s => s.juego))];
-
-    games.forEach(g => {
-
-        const option =
-            document.createElement('option');
-
-        option.value = g;
-        option.textContent = g;
-
-        select.appendChild(option);
-
+    .then(r => r.json())
+    .then(data => {
+        songs = data;
+        loadGames();
     });
 
+function loadGames() {
+    const select = document.getElementById('gameSelect');
+    const games = [...new Set(songs.map(s => s.juego))];
+
+    games.forEach(g => {
+        const option = document.createElement('option');
+        option.value = g;
+        option.textContent = g;
+        select.appendChild(option);
+    });
 }
 
-document
-.getElementById('gameSelect')
-.addEventListener('change', e => {
-
-    filtered = songs.filter(s =>
-
-        s.juego === e.target.value &&
-        s.portadaDisponible
-
-    );
-
+document.getElementById('gameSelect').addEventListener('change', e => {
+    filtered = songs.filter(s => s.juego === e.target.value && s.portadaDisponible);
     history = [];
-
     createWheel();
-
 });
 
-function createWheel(){
-
-    const carousel =
-        document.getElementById('carousel');
-
+function createWheel() {
+    const carousel = document.getElementById('carousel');
     carousel.innerHTML = "";
 
     if(filtered.length === 0) return;
 
-    const visible =
-        Math.min(filtered.length,20);
+    const visible = Math.min(filtered.length, 20);
+    const list = filtered.slice(0, visible);
+    const angle = 360 / list.length;
+    
+    // Aumentado de 650 a 800 para que las cartas no se solapen
+    const radius = 800; 
 
-    const list =
-        filtered.slice(0,visible);
-
-    const angle =
-        360 / list.length;
-
-    const radius = 650;
-
-    list.forEach((song,i) => {
-
-        const card =
-            document.createElement('div');
-
+    list.forEach((song, i) => {
+        const card = document.createElement('div');
         card.className = 'card';
-
-        card.style.transform = `
-            rotateY(${i * angle}deg)
-            translateZ(${radius}px)
-        `;
+        
+        // CORRECCIÓN: Todo en una sola línea para evitar problemas de espaciado invisible
+        card.style.transform = `rotateY(${i * angle}deg) translateZ(${radius}px)`;
 
         card.innerHTML = `
-
-            <img
-            src="portadas/${song.version}/${song.codigo}.webp"
-            onerror="this.src='portadas/default.webp'">
-
-            <div class="title">
-                ${song.cancion}
-            </div>
-
+            <img src="portadas/${song.version}/${song.codigo}.webp" onerror="this.src='portadas/default.webp'">
+            <div class="title">${song.cancion}</div>
         `;
-
         carousel.appendChild(card);
-
     });
-
 }
 
-function spin(){
-
+function spin() {
     if(filtered.length === 0) return;
 
-    const overlay =
-        document.getElementById('overlay');
-
-    const carousel =
-        document.getElementById('carousel');
-
+    const overlay = document.getElementById('overlay');
+    const carousel = document.getElementById('carousel');
     overlay.classList.add('active');
 
-    if(history.length === filtered.length){
+    // CORRECCIÓN LÓGICA: Trabajar solo con las cartas que realmente están en el círculo
+    const visible = Math.min(filtered.length, 20);
+    const list = filtered.slice(0, visible);
 
+    if(history.length === list.length){
         history = [];
-
     }
 
-    const available =
-        filtered.filter(s =>
-
-            !history.includes(s.codigo)
-
-        );
-
-    const random =
-        available[
-            Math.floor(Math.random() * available.length)
-        ];
+    const available = list.filter(s => !history.includes(s.codigo));
+    const random = available[Math.floor(Math.random() * available.length)];
 
     history.push(random.codigo);
+    document.getElementById('historyCount').textContent = history.length;
 
-    document.getElementById(
-        'historyCount'
-    ).textContent = history.length;
-
-    const visible =
-        Math.min(filtered.length,20);
-
-    const angle =
-        360 / visible;
-
-    const index =
-        filtered.indexOf(random);
-
-    const finalRotation =
-        7200 + (index * angle);
+    const angle = 360 / visible;
+    
+    // CORRECCIÓN: Buscar el índice dentro de 'list', no en todo 'filtered'
+    const index = list.indexOf(random); 
+    const finalRotation = 7200 + (index * angle);
 
     currentRotation += finalRotation;
 
-    carousel.style.transform = `
-        rotateX(-10deg)
-        rotateY(${-currentRotation}deg)
-    `;
+    // CORRECCIÓN: Todo en una sola línea
+    carousel.style.transform = `rotateX(-10deg) rotateY(${-currentRotation}deg)`;
 
     setTimeout(() => {
-
         showResult(random);
-
-    },12000);
+    }, 12000);
 
     setTimeout(() => {
-
         overlay.classList.remove('active');
-
-    },12800);
-
+    }, 12800);
 }
 
-function showResult(song){
+function showResult(song) {
+    document.getElementById('songName').textContent = song.cancion;
+    document.getElementById('artist').textContent = song.artista;
 
-    document.getElementById(
-        'songName'
-    ).textContent = song.cancion;
-
-    document.getElementById(
-        'artist'
-    ).textContent = song.artista;
-
-    const cover =
-        document.getElementById('cover');
-
-    cover.src =
-        `portadas/${song.version}/${song.codigo}.webp`;
-
+    const cover = document.getElementById('cover');
+    cover.src = `portadas/${song.version}/${song.codigo}.webp`;
     cover.onerror = () => {
-
         cover.src = 'portadas/default.webp';
-
     };
 
-    const audio =
-        document.getElementById('audio');
-
-    audio.src =
-        `musica/${song.version}/${song.codigo}.ogg`;
-
+    const audio = document.getElementById('audio');
+    audio.src = `musica/${song.version}/${song.codigo}.ogg`;
     audio.play().catch(()=>{});
-
 }
-
 </script>
 
 </body>
