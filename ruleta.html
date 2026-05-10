@@ -3,94 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Just Dance Championship - Neon Edition</title>
+<title>Just Dance Championship - Pro Edition</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
     :root {
-        --primary-neon: #00f2ff; /* Cyan */
-        --secondary-neon: #bc00ff; /* Violeta */
+        --primary-neon: #00f2ff;
+        --secondary-neon: #bc00ff;
         --bg-dark: #050510;
         --panel-bg: rgba(20, 20, 40, 0.7);
     }
 
-    body {
-        margin: 0;
-        overflow-x: hidden;
-        background: var(--bg-dark);
-        color: white;
-        font-family: 'Segoe UI', Roboto, sans-serif;
-    }
-
-    h1 {
-        text-align: center;
-        margin-top: 20px;
-        font-weight: 800;
-        text-transform: uppercase;
-        color: var(--primary-neon);
-        text-shadow: 0 0 15px var(--primary-neon);
-    }
-
-    .panel {
-        background: var(--panel-bg);
-        border-radius: 20px;
-        padding: 20px;
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(0, 242, 255, 0.2);
-        height: 100%;
-    }
-
+    body { margin: 0; overflow-x: hidden; background: var(--bg-dark); color: white; font-family: 'Segoe UI', Roboto, sans-serif; }
+    h1 { text-align: center; margin-top: 20px; font-weight: 800; text-transform: uppercase; color: var(--primary-neon); text-shadow: 0 0 15px var(--primary-neon); }
+    
+    .panel { background: var(--panel-bg); border-radius: 20px; padding: 20px; backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.2); height: 100%; }
     .text-neon { color: var(--primary-neon); text-shadow: 0 0 5px var(--primary-neon); }
-    .text-violet { color: var(--secondary-neon); }
-
-    /* ESTILO TABLA */
+    
+    /* TABLA */
     .table { color: white !important; margin-top: 10px; }
-    .table th { border-bottom: 2px solid var(--secondary-neon); color: var(--secondary-neon); text-transform: uppercase; font-size: 0.8rem; text-align: center; }
-    .table td { vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; padding: 10px 5px; }
+    .table th { border-bottom: 2px solid var(--secondary-neon); color: var(--secondary-neon); text-transform: uppercase; font-size: 0.75rem; text-align: center; }
+    .table td { vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; padding: 8px 4px; font-size: 0.9rem; }
 
-    .btn-neon {
-        background: transparent;
-        border: 2px solid var(--primary-neon);
-        color: var(--primary-neon);
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    .btn-neon:hover {
-        background: var(--primary-neon);
-        color: black;
-        box-shadow: 0 0 20px var(--primary-neon);
-    }
+    .btn-neon { background: transparent; border: 2px solid var(--primary-neon); color: var(--primary-neon); font-weight: bold; transition: 0.3s; }
+    .btn-neon:hover { background: var(--primary-neon); color: black; box-shadow: 0 0 20px var(--primary-neon); }
+    .btn-neon:disabled { border-color: #444; color: #444; box-shadow: none; }
 
-    .song-count-badge {
-        background: var(--secondary-neon);
-        color: white;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        display: inline-block;
-        margin-bottom: 10px;
-    }
+    .song-count-badge { background: var(--secondary-neon); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; }
+
+    /* PARTICIPANTES DE LA RONDA */
+    .match-card { background: rgba(0,0,0,0.5); border: 1px solid var(--primary-neon); border-radius: 10px; padding: 10px; margin-top: 10px; }
+    .player-tag { display: inline-block; background: var(--secondary-neon); color: white; padding: 2px 10px; border-radius: 5px; margin: 2px; font-size: 0.85rem; font-weight: bold; }
 
     /* RULETA */
-    .overlay {
-        position: fixed;
-        inset: 0;
-        background: radial-gradient(circle, rgba(15,0,30,0.98) 0%, rgba(0,0,0,1) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: 0.4s;
-        z-index: 9999;
-    }
+    .overlay { position: fixed; inset: 0; background: radial-gradient(circle, rgba(15,0,30,0.98) 0%, rgba(0,0,0,1) 100%); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 9999; }
     .overlay.active { opacity: 1; pointer-events: all; }
     .scene { width: 100%; height: 80vh; perspective: 2000px; display: flex; justify-content: center; align-items: center; }
-    .carousel { position: relative; width: 220px; height: 300px; transform-style: preserve-3d; transition: transform 12s cubic-bezier(0.1, 0.8, 0.2, 1); }
+    .carousel { position: relative; width: 220px; height: 300px; transform-style: preserve-3d; transition: transform 12s cubic-bezier(0.1, 0.8, 0.15, 1); }
     .card { position: absolute; width: 220px; height: 300px; border-radius: 15px; overflow: hidden; background: #000; border: 2px solid var(--primary-neon); backface-visibility: hidden; }
-    .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-    .card .title { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: rgba(0, 0, 0, 0.85); color: white; text-align: center; font-size: 12px; font-weight: bold; border-top: 1px solid var(--primary-neon); }
+    .card img { width: 100%; height: 100%; object-fit: cover; }
+    .card .title { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: rgba(0, 0, 0, 0.85); color: white; text-align: center; font-size: 11px; font-weight: bold; }
     .pointer { position: absolute; top: 10%; left: 50%; transform: translateX(-50%); font-size: 60px; z-index: 10000; color: var(--primary-neon); text-shadow: 0 0 20px var(--primary-neon); }
 </style>
 </head>
@@ -99,14 +52,14 @@
 <h1>🎡 Just Dance Championship</h1>
 
 <div class="container-fluid px-4 mt-3">
-    <div class="row g-4">
-        <!-- IZQUIERDA: REGISTRO Y TABLA -->
-        <div class="col-lg-5">
-            <div class="panel mb-4">
-                <h5 class="text-neon mb-3">👤 1. REGISTRAR JUGADORES</h5>
+    <div class="row g-3">
+        <!-- IZQUIERDA: JUGADORES -->
+        <div class="col-lg-4">
+            <div class="panel">
+                <h6 class="text-neon mb-3">👤 REGISTRO DE JUGADORES</h6>
                 <div class="input-group mb-3">
-                    <input type="text" id="playerName" class="form-control bg-dark text-white border-secondary" placeholder="Nombre del amigo...">
-                    <button class="btn btn-neon" onclick="addPlayer()">+ Añadir</button>
+                    <input type="text" id="playerName" class="form-control bg-dark text-white border-secondary" placeholder="Nombre...">
+                    <button class="btn btn-neon" onclick="addPlayer()">+</button>
                 </div>
                 
                 <div class="table-responsive">
@@ -114,54 +67,57 @@
                         <thead>
                             <tr>
                                 <th class="text-start">Nombre</th>
-                                <th>Bailes</th>
+                                <th>💃</th>
                                 <th>Pts</th>
                                 <th>Bonif</th>
-                                <th class="text-neon">TOTAL</th>
+                                <th class="text-neon">Total</th>
                             </tr>
                         </thead>
                         <tbody id="leaderboardBody"></tbody>
                     </table>
                 </div>
+
+                <div id="selectionPanel" class="mt-4" style="display:none;">
+                    <h6 class="text-neon">🤝 EMPAREJAMIENTO (4 JUGADORES)</h6>
+                    <button class="btn btn-sm btn-outline-info w-100 mb-2" onclick="pickParticipants()">DECIDIR PARTICIPANTES</button>
+                    <div id="nextMatch" class="match-card text-center">
+                        <small class="text-secondary">Haz clic para elegir quién baila esta ronda</small>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- DERECHA: RULETA Y RESULTADOS -->
-        <div class="col-lg-7">
+        <!-- DERECHA: RULETA -->
+        <div class="col-lg-8">
             <div class="panel">
-                <h5 class="text-neon mb-3">🎮 2. SELECCIÓN Y RULETA</h5>
-                
-                <div class="row mb-3">
-                    <div class="col-md-7">
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-6">
                         <select id="gameSelect" class="form-select bg-dark text-white border-secondary"></select>
                     </div>
-                    <div class="col-md-5 text-end">
-                        <div id="songCountContainer" style="display:none;">
-                            <span class="song-count-badge"> canciones: <span id="songCount">0</span></span>
-                        </div>
+                    <div class="col-md-6 text-end">
+                        <span id="songCountContainer" class="song-count-badge" style="display:none;">
+                            Disponibles: <span id="songCount">0</span>
+                        </span>
                     </div>
                 </div>
 
-                <button id="btnSpin" class="btn btn-neon w-100 py-3 mb-4" onclick="spin()" disabled>
-                    🎡 GIRAR PARA ELEGIR CANCIÓN
-                </button>
+                <button id="btnSpin" class="btn btn-neon w-100 py-3 mb-4" onclick="spin()" disabled>🎡 GIRAR RULETA</button>
 
-                <div class="text-center" id="resultDisplay">
-                    <h2 id="songName" class="text-neon fw-bold">Esperando juego...</h2>
-                    <p id="artist" class="text-secondary"></p>
-                    <img id="cover" class="result-img" src="portadas/default.webp" style="max-width: 250px; border-radius: 15px;">
-                    <audio id="audio" controls class="w-100 mt-3" style="max-width: 400px; margin: 15px auto;"></audio>
+                <div class="text-center">
+                    <h3 id="songName" class="text-neon fw-bold">Selecciona un juego</h3>
+                    <p id="artist" class="text-secondary mb-3"></p>
+                    <img id="cover" class="img-fluid rounded-4 shadow-lg" src="portadas/default.webp" style="max-height: 220px;">
+                    <audio id="audio" controls class="w-100 mt-3" style="max-width: 450px; margin: auto;"></audio>
                 </div>
 
-                <!-- FORMULARIO DE PUNTOS -->
                 <div id="scoreForm" class="mt-4 p-3 rounded-4" style="display:none; background: rgba(0,0,0,0.4); border: 1px solid var(--secondary-neon);">
                     <h6 class="text-violet mb-3">⭐ ASIGNAR PUNTOS DE LA RONDA</h6>
                     <div class="row g-2 align-items-end">
                         <div class="col-md-4">
-                            <select id="playerSelect" class="form-select bg-dark text-white"></select>
+                            <select id="playerSelect" class="form-select bg-dark text-white border-secondary"></select>
                         </div>
                         <div class="col-md-3">
-                            <select id="puestoSelect" class="form-select bg-dark text-white">
+                            <select id="puestoSelect" class="form-select bg-dark text-white border-secondary">
                                 <option value="5">1° Lugar (+5)</option>
                                 <option value="4">2° Lugar (+4)</option>
                                 <option value="2">3° Lugar (+2)</option>
@@ -169,7 +125,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="estrellasSelect" class="form-select bg-dark text-white">
+                            <select id="estrellasSelect" class="form-select bg-dark text-white border-secondary">
                                 <option value="3">5 Estrellas (+3)</option>
                                 <option value="2">4 Estrellas (+2)</option>
                                 <option value="1">3 Estrellas (+1)</option>
@@ -212,36 +168,23 @@ fetch('canciones.json').then(r => r.json()).then(data => {
 
 document.getElementById('gameSelect').addEventListener('change', e => {
     filtered = songs.filter(s => s.juego === e.target.value && s.portadaDisponible);
-    history = [];
-    
-    const countContainer = document.getElementById('songCountContainer');
-    const countSpan = document.getElementById('songCount');
-    const btnSpin = document.getElementById('btnSpin');
-
-    if(e.target.value) {
-        countContainer.style.display = 'inline-block';
-        countSpan.textContent = filtered.length;
-        btnSpin.disabled = false;
-        createWheel();
-    } else {
-        countContainer.style.display = 'none';
-        btnSpin.disabled = true;
-    }
+    history = []; // Reiniciar historial al cambiar de juego
+    document.getElementById('songCountContainer').style.display = e.target.value ? 'inline-block' : 'none';
+    document.getElementById('songCount').textContent = filtered.length;
+    document.getElementById('btnSpin').disabled = !e.target.value;
+    if(e.target.value) createWheel();
 });
 
 function createWheel() {
     const carousel = document.getElementById('carousel');
     carousel.innerHTML = "";
-    if(filtered.length === 0) return;
     const visibleCount = Math.min(filtered.length, 20);
     const list = filtered.slice(0, visibleCount);
     const angle = 360 / list.length;
-    const radius = 900;
-
     list.forEach((song, i) => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.style.transform = `rotateY(${i * angle}deg) translateZ(${radius}px)`;
+        card.style.transform = `rotateY(${i * angle}deg) translateZ(900px)`;
         card.innerHTML = `<img src="portadas/${song.version}/${song.codigo}.webp" onerror="this.src='portadas/default.webp'"><div class="title">${song.cancion}</div>`;
         carousel.appendChild(card);
     });
@@ -249,27 +192,39 @@ function createWheel() {
 
 function spin() {
     if(filtered.length === 0) return;
+    const available = filtered.filter(s => !history.includes(s.codigo));
+    
+    // Si se acabaron las canciones, reiniciar historial para no detener el juego
+    if(available.length === 0) { history = []; }
+
     const overlay = document.getElementById('overlay');
     const carousel = document.getElementById('carousel');
     overlay.classList.add('active');
 
     const visibleCount = Math.min(filtered.length, 20);
     const visibleSongs = filtered.slice(0, visibleCount);
-    if(history.length >= visibleSongs.length) history = [];
     
-    const available = visibleSongs.filter(s => !history.includes(s.codigo));
-    const random = available[Math.floor(Math.random() * available.length)];
-    history.push(random.codigo);
+    // Selección aleatoria
+    const songToPick = available[Math.floor(Math.random() * available.length)];
+    history.push(songToPick.codigo);
+    document.getElementById('songCount').textContent = filtered.length - (history.length % filtered.length);
 
+    // Lógica de giro "True Random"
     const anglePerCard = 360 / visibleCount;
-    const index = visibleSongs.indexOf(random);
+    const index = visibleSongs.indexOf(songToPick);
+    
+    // Si la canción no está entre las primeras 20 visuales, usamos un índice ficticio para que la ruleta gire
+    const visualIndex = index === -1 ? Math.floor(Math.random() * visibleCount) : index;
+
+    // Aseguramos que el giro sea siempre largo (mínimo 10 vueltas + un offset aleatorio)
+    const extraRandomVueltas = Math.floor(Math.random() * 5) * 360; 
     const baseVueltas = Math.ceil(currentRotation / 360) * 360;
-    currentRotation = baseVueltas + 3600 + (index * anglePerCard);
+    currentRotation = baseVueltas + 3600 + extraRandomVueltas + (visualIndex * anglePerCard);
 
     carousel.style.transform = `rotateY(${-currentRotation}deg)`;
 
     setTimeout(() => {
-        showResult(random);
+        showResult(songToPick);
         overlay.classList.remove('active');
     }, 12000);
 }
@@ -290,6 +245,7 @@ function addPlayer() {
         players.push({ nombre: name, bailes: 0, ptsPuesto: 0, bonif: 0, total: 0 });
         input.value = "";
         updateLeaderboard();
+        if(players.length > 4) document.getElementById('selectionPanel').style.display = 'block';
     }
 }
 
@@ -304,6 +260,27 @@ function updateLeaderboard() {
     });
 }
 
+// ALGORITMO DE EQUILIBRIO
+function pickParticipants() {
+    if(players.length < 4) return;
+    
+    // Clonamos para no desordenar la tabla original
+    let pool = [...players];
+    
+    // Ordenar por: 1. Menos bailes (Prioridad máxima para igualar), 2. Menos puntos (Para ayudar a remontar)
+    pool.sort((a, b) => {
+        if(a.bailes !== b.bailes) return a.bailes - b.bailes;
+        return a.total - b.total;
+    });
+
+    const chosen = pool.slice(0, 4);
+    const container = document.getElementById('nextMatch');
+    container.innerHTML = `<div class="mb-1 small text-info">Participantes sugeridos:</div>`;
+    chosen.forEach(p => {
+        container.innerHTML += `<span class="player-tag">${p.nombre}</span>`;
+    });
+}
+
 function saveScore() {
     const pName = document.getElementById('playerSelect').value;
     const pPuesto = parseInt(document.getElementById('puestoSelect').value);
@@ -312,7 +289,6 @@ function saveScore() {
         const p = players.find(x => x.nombre === pName);
         p.bailes++; p.ptsPuesto += pPuesto; p.bonif += pEstrellas; p.total = p.ptsPuesto + p.bonif;
         updateLeaderboard();
-        alert(`Puntos cargados a ${pName}`);
     }
 }
 </script>
