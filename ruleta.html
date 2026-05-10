@@ -86,6 +86,7 @@ h1 {
     height: 500px;
     transform-style: preserve-3d;
     transition: transform 12s cubic-bezier(0.08,0.82,0.17,1);
+    /* Sin rotateX aquí para que sea frontal */
 }
 
 /* CARTAS */
@@ -99,9 +100,12 @@ h1 {
     overflow: hidden;
     background: #111;
     border: 3px solid rgba(255,255,255,0.12);
-    box-shadow: 
-        0 10px 30px rgba(0,0,0,0.6),
-        0 0 25px rgba(255,255,255,0.12);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    
+    /* ESTO OCULTA LAS CARTAS QUE ESTÁN DE ESPALDAS */
+    backface-visibility: hidden; 
+    -webkit-backface-visibility: hidden;
+    
     transform-style: preserve-3d;
 }
 
@@ -241,15 +245,11 @@ function spin() {
 
     const overlay = document.getElementById('overlay');
     const carousel = document.getElementById('carousel');
-    
-    // 1. Activar el overlay
     overlay.classList.add('active');
 
-    // 2. Limitar a las canciones que realmente se dibujaron (máximo 20)
     const visibleCount = Math.min(filtered.length, 20);
     const visibleSongs = filtered.slice(0, visibleCount);
 
-    // 3. Control de historial para no repetir dentro de la tanda visible
     if (history.length >= visibleSongs.length) {
         history = [];
     }
@@ -260,38 +260,22 @@ function spin() {
     history.push(random.codigo);
     document.getElementById('historyCount').textContent = history.length;
 
-    // 4. CÁLCULO DE ROTACIÓN (La clave del problema)
     const anglePerCard = 360 / visibleCount;
     const index = visibleSongs.indexOf(random);
     
-    /**
-     * Explicación del cálculo:
-     * - Queremos que la carta con 'index' quede en el frente (0 grados).
-     * - Para que la carta N venga al frente, el carrusel debe rotar -(index * angle).
-     * - Sumamos 3600 (10 vueltas) para que el giro sea largo y espectacular.
-     * - IMPORTANTE: No sumamos a currentRotation acumulando infinitamente de forma descontrolada,
-     *   sino que calculamos el destino relativo al inicio del giro.
-     */
-    
-    // Calculamos cuántas vueltas completas lleva y sumamos las nuevas
     const baseVueltas = Math.ceil(currentRotation / 360) * 360;
-    const extraVueltas = 3600; // 10 vueltas de animación
+    const extraVueltas = 3600; 
     const targetAngle = index * anglePerCard;
     
-    // El nuevo ángulo es: vueltas anteriores + vueltas de regalo + la posición de la carta
-    // Usamos el signo negativo para que el carrusel gire en el sentido correcto hacia la carta
     currentRotation = baseVueltas + extraVueltas + targetAngle;
 
-    // 5. Aplicar la transformación
-    // rotateY se aplica negativo (-currentRotation) para que la carta avance hacia el puntero
-    carousel.style.transform = `rotateX(-10deg) rotateY(${-currentRotation}deg)`;
+    // ELIMINADO EL rotateX PARA VISTA FRONTAL PURA
+    carousel.style.transform = `rotateY(${-currentRotation}deg)`;
 
-    // 6. Mostrar resultados tras la animación (12 segundos según tu CSS)
     setTimeout(() => {
         showResult(random);
     }, 12000);
 
-    // 7. Quitar el overlay un poco después
     setTimeout(() => {
         overlay.classList.remove('active');
     }, 12800);
