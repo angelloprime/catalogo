@@ -15,7 +15,7 @@ body{
   background:
     radial-gradient(circle at top,#252547,#0d0d16);
   color:white;
-  overflow-x:hidden;
+  overflow:hidden;
   font-family:Arial,sans-serif;
 }
 
@@ -115,6 +115,7 @@ h1{
   height:700px;
 
   transform-style:preserve-3d;
+  will-change:transform;
 
   transition:
     transform 12s cubic-bezier(0.08,0.8,0.12,1);
@@ -128,8 +129,11 @@ h1{
   width:220px;
   height:300px;
 
-  left:240px;
-  top:180px;
+  left:50%;
+  top:50%;
+
+  margin-left:-110px;
+  margin-top:-150px;
 
   border-radius:20px;
 
@@ -225,10 +229,19 @@ h1{
     transform:scale(0.55);
   }
 
+  .card3d{
+    width:160px;
+    height:220px;
+
+    margin-left:-80px;
+    margin-top:-110px;
+  }
+
 }
 
 </style>
 </head>
+
 <body>
 
 <h1>🎡 Ruleta 3D Just Dance</h1>
@@ -351,7 +364,7 @@ function cargarJuegos(){
 
 }
 
-/* CAMBIAR JUEGO */
+/* CAMBIO DE JUEGO */
 
 document
 .getElementById('selectorJuego')
@@ -402,6 +415,7 @@ function crearCarrusel3D(){
     card.style.transform = `
       rotateY(${i * angulo}deg)
       translateZ(${radioInicial}px)
+      rotateY(${-i * angulo}deg)
     `;
 
     card.innerHTML = `
@@ -442,6 +456,7 @@ function expandirRuleta(){
     card.style.transform = `
       rotateY(${i * angulo}deg)
       translateZ(${radioFinal}px)
+      rotateY(${-i * angulo}deg)
     `;
 
   });
@@ -508,7 +523,7 @@ function girar(){
   const grados =
     7200 + (index * angulo);
 
-  /* PEQUEÑA PAUSA PARA EXPANSIÓN */
+  /* PAUSA PARA EXPANSIÓN */
 
   setTimeout(() => {
 
@@ -543,7 +558,7 @@ function girar(){
 
 }
 
-/* RESULTADO */
+/* MOSTRAR RESULTADO */
 
 function mostrarResultado(c){
 
@@ -554,8 +569,6 @@ function mostrarResultado(c){
   document.getElementById(
     'artista'
   ).textContent = c.artista;
-
-  /* PORTADA */
 
   const portada =
     document.getElementById(
@@ -571,8 +584,6 @@ function mostrarResultado(c){
       'portadas/default.webp';
 
   };
-
-  /* AUDIO */
 
   const player =
     document.getElementById('player');
