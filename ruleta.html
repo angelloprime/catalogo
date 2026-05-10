@@ -145,7 +145,9 @@ h1{
     0 10px 30px rgba(0,0,0,0.5),
     0 0 25px rgba(255,255,255,0.15);
 
-  transition:0.3s;
+  transition:
+    transform 2s ease,
+    filter 0.3s;
 }
 
 .card3d img{
@@ -227,7 +229,6 @@ h1{
 
 </style>
 </head>
-
 <body>
 
 <h1>🎡 Ruleta 3D Just Dance</h1>
@@ -389,7 +390,7 @@ function crearCarrusel3D(){
   const angulo =
     360 / lista.length;
 
-  const radio = 520;
+  const radioInicial = 80;
 
   lista.forEach((c,i) => {
 
@@ -400,7 +401,7 @@ function crearCarrusel3D(){
 
     card.style.transform = `
       rotateY(${i * angulo}deg)
-      translateZ(${radio}px)
+      translateZ(${radioInicial}px)
     `;
 
     card.innerHTML = `
@@ -421,6 +422,32 @@ function crearCarrusel3D(){
 
 }
 
+/* EXPANDIR RULETA */
+
+function expandirRuleta(){
+
+  const cards =
+    document.querySelectorAll('.card3d');
+
+  const cantidad =
+    cards.length;
+
+  const angulo =
+    360 / cantidad;
+
+  const radioFinal = 520;
+
+  cards.forEach((card,i) => {
+
+    card.style.transform = `
+      rotateY(${i * angulo}deg)
+      translateZ(${radioFinal}px)
+    `;
+
+  });
+
+}
+
 /* GIRAR */
 
 function girar(){
@@ -435,7 +462,11 @@ function girar(){
 
   overlay.classList.add('activo');
 
-  /* RESET HISTORIAL */
+  /* EXPANSIÓN */
+
+  expandirRuleta();
+
+  /* HISTORIAL */
 
   if(historial.length === filtradas.length){
 
@@ -477,14 +508,22 @@ function girar(){
   const grados =
     7200 + (index * angulo);
 
-  rotacionActual += grados;
+  /* PEQUEÑA PAUSA PARA EXPANSIÓN */
 
-  carousel.classList.add('girando');
+  setTimeout(() => {
 
-  carousel.style.transform = `
-    rotateX(-18deg)
-    rotateY(${-rotacionActual}deg)
-  `;
+    rotacionActual += grados;
+
+    carousel.classList.add('girando');
+
+    carousel.style.transform = `
+      rotateX(-18deg)
+      rotateY(${-rotacionActual}deg)
+    `;
+
+  },500);
+
+  /* RESULTADO */
 
   setTimeout(() => {
 
@@ -492,13 +531,15 @@ function girar(){
 
     mostrarResultado(random);
 
-  },12000);
+  },12500);
+
+  /* CERRAR OVERLAY */
 
   setTimeout(() => {
 
     overlay.classList.remove('activo');
 
-  },12800);
+  },13300);
 
 }
 
