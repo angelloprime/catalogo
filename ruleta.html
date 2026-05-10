@@ -2,30 +2,51 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Just Dance Championship - Precisión Total</title>
+<title>Just Dance - Precisión 100%</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-    :root { --primary-neon: #00f2ff; --secondary-neon: #bc00ff; --bg-dark: #050510; --panel-bg: rgba(20, 20, 40, 0.7); }
-    body { margin: 0; overflow-x: hidden; background: var(--bg-dark); color: white; font-family: 'Segoe UI', sans-serif; }
-    h1 { text-align: center; margin-top: 20px; font-weight: 800; color: var(--primary-neon); text-shadow: 0 0 15px var(--primary-neon); }
-    .panel { background: var(--panel-bg); border-radius: 20px; padding: 20px; backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.2); height: 100%; }
-    .text-neon { color: var(--primary-neon); text-shadow: 0 0 5px var(--primary-neon); }
-    .table { color: white !important; font-size: 0.9rem; }
-    .table th { border-bottom: 2px solid var(--secondary-neon); color: var(--secondary-neon); text-transform: uppercase; text-align: center; }
-    .table td { border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
-    .btn-neon { background: transparent; border: 2px solid var(--primary-neon); color: var(--primary-neon); font-weight: bold; transition: 0.3s; }
-    .btn-neon:hover { background: var(--primary-neon); color: black; box-shadow: 0 0 20px var(--primary-neon); }
-    .player-tag { display: inline-block; background: var(--secondary-neon); color: white; padding: 2px 10px; border-radius: 5px; margin: 2px; font-size: 0.85rem; }
+    :root { --primary-neon: #00f2ff; --secondary-neon: #bc00ff; --bg-dark: #050510; }
+    body { background: var(--bg-dark); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
     
-    /* CORRECCIÓN RULETA */
-    .overlay { position: fixed; inset: 0; background: radial-gradient(circle, rgba(15,0,30,0.98) 0%, rgba(0,0,0,1) 100%); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 9999; }
+    /* CONTENEDOR DE RULETA */
+    .overlay { position: fixed; inset: 0; background: black; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 9999; }
     .overlay.active { opacity: 1; pointer-events: all; }
-    .scene { width: 100%; height: 80vh; perspective: 2000px; display: flex; justify-content: center; align-items: center; }
-    .carousel { position: relative; width: 220px; height: 300px; transform-style: preserve-3d; transition: transform 10s cubic-bezier(0.1, 0.7, 0.1, 1); }
-    .card { position: absolute; width: 220px; height: 300px; border-radius: 15px; overflow: hidden; background: #000; border: 2px solid var(--primary-neon); backface-visibility: hidden; }
-    .card img { width: 100%; height: 100%; object-fit: cover; }
-    .pointer { position: absolute; top: 12%; left: 50%; transform: translateX(-50%); font-size: 60px; z-index: 10000; color: var(--primary-neon); text-shadow: 0 0 20px var(--primary-neon); }
+    
+    .scene { width: 300px; height: 400px; perspective: 2000px; display: flex; justify-content: center; align-items: center; }
+    
+    .carousel { 
+        position: relative; 
+        width: 220px; 
+        height: 300px; 
+        transform-style: preserve-3d; 
+        /* Usamos una transición suave pero firme */
+        transition: transform 10s cubic-bezier(0.1, 0.8, 0.1, 1); 
+    }
+
+    .card { 
+        position: absolute; 
+        width: 220px; 
+        height: 300px; 
+        border: 3px solid var(--primary-neon); 
+        border-radius: 15px; 
+        backface-visibility: hidden; 
+        background: #000;
+    }
+
+    .card img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+
+    /* FLECHA INDICADORA - AHORA MÁS GRANDE Y CENTRADA */
+    .pointer { 
+        position: absolute; 
+        top: 50px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        font-size: 80px; 
+        z-index: 10001; 
+        color: #ff0000; /* Rojo para que no haya duda */
+        text-shadow: 0 0 20px rgba(255,0,0,0.8);
+        filter: drop-shadow(0 0 10px white);
+    }
 </style>
 </head>
 <body>
@@ -105,7 +126,12 @@
     </div>
 </div>
 
-<div id="overlay" class="overlay"><div class="pointer">▼</div><div class="scene"><div id="carousel" class="carousel"></div></div></div>
+<div id="overlay" class="overlay">
+    <div class="pointer">▼</div>
+    <div class="scene">
+        <div id="carousel" class="carousel"></div>
+    </div>
+</div>
 
 <script>
 let songs = [], filtered = [], history = [], players = [];
@@ -132,12 +158,14 @@ document.getElementById('gameSelect').addEventListener('change', e => {
 function createWheel() {
     const carousel = document.getElementById('carousel');
     carousel.innerHTML = "";
-    const list = filtered.slice(0, 20); // Máximo 20 visuales
+    // Usamos exactamente 20 espacios para que la división sea perfecta (18 grados cada uno)
+    const list = filtered.slice(0, 20); 
     const angle = 360 / list.length;
+    
     list.forEach((song, i) => {
         const card = document.createElement('div');
         card.className = 'card';
-        // El ángulo i*angle define la posición. 0 grados es el frente.
+        // IMPORTANTE: El ángulo debe ser exacto
         card.style.transform = `rotateY(${i * angle}deg) translateZ(800px)`;
         card.innerHTML = `<img src="portadas/${song.version}/${song.codigo}.webp" onerror="this.src='portadas/default.webp'">`;
         carousel.appendChild(card);
@@ -146,32 +174,42 @@ function createWheel() {
 
 function spin() {
     const available = filtered.filter(s => !history.includes(s.codigo));
-    if(available.length === 0) history = [];
-    
     const songToPick = available[Math.floor(Math.random() * available.length)];
-    history.push(songToPick.codigo);
+    
+    const visibleList = filtered.slice(0, 20);
+    let targetIndex = visibleList.findIndex(s => s.codigo === songToPick.codigo);
+    
+    // Si la canción no está en los primeros 20, forzamos que aparezca visualmente
+    if(targetIndex === -1) {
+        targetIndex = Math.floor(Math.random() * visibleList.length);
+        // Actualizamos la carta visual con la info de la canción real para que coincida
+        const cards = document.querySelectorAll('.card');
+        cards[targetIndex].innerHTML = `<img src="portadas/${songToPick.version}/${songToPick.codigo}.webp">`;
+    }
 
     const overlay = document.getElementById('overlay');
     const carousel = document.getElementById('carousel');
     overlay.classList.add('active');
 
-    const visibleList = filtered.slice(0, 20);
     const anglePerCard = 360 / visibleList.length;
     
-    // Si la canción elegida no está en las primeras 20, visualmente elegimos una posición random
-    let targetIndex = visibleList.findIndex(s => s.codigo === songToPick.codigo);
-    if(targetIndex === -1) targetIndex = Math.floor(Math.random() * visibleList.length);
+    // LÓGICA DE PRECISIÓN:
+    // 1. Calculamos cuántas vueltas completas queremos (ej. 10)
+    const vueltas = 10 * 360;
+    // 2. Calculamos el ángulo necesario para que el targetIndex quede en el grado 0 (frente)
+    // El negativo es porque rotamos el mundo, no la flecha.
+    const targetAngle = targetIndex * anglePerCard;
+    
+    // 3. Ajustamos la rotación total acumulada
+    // Restamos el ángulo del objetivo para que "vuelva" al centro
+    currentRotation = (Math.ceil(currentRotation / 360) * 360) + vueltas - targetAngle;
 
-    const extraVueltas = (Math.floor(Math.random() * 5) + 8) * 360; 
-    // Para que el índice quede bajo la flecha (0 grados), restamos el ángulo acumulado
-    currentRotation += extraVueltas + (targetIndex * anglePerCard) - (currentRotation % 360);
-
-    carousel.style.transform = `rotateY(${-currentRotation}deg)`;
+    carousel.style.transform = `rotateY(${currentRotation}deg)`;
 
     setTimeout(() => {
         showResult(songToPick);
+        history.push(songToPick.codigo);
         overlay.classList.remove('active');
-        resetRoundControls(); // Limpiar bloqueos de la ronda anterior
     }, 10500);
 }
 
