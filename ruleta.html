@@ -3,48 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Just Dance Championship - Pro Edition</title>
-
+<title>Just Dance Championship - Precisión Total</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <style>
-    :root {
-        --primary-neon: #00f2ff;
-        --secondary-neon: #bc00ff;
-        --bg-dark: #050510;
-        --panel-bg: rgba(20, 20, 40, 0.7);
-    }
-
-    body { margin: 0; overflow-x: hidden; background: var(--bg-dark); color: white; font-family: 'Segoe UI', Roboto, sans-serif; }
-    h1 { text-align: center; margin-top: 20px; font-weight: 800; text-transform: uppercase; color: var(--primary-neon); text-shadow: 0 0 15px var(--primary-neon); }
-    
+    :root { --primary-neon: #00f2ff; --secondary-neon: #bc00ff; --bg-dark: #050510; --panel-bg: rgba(20, 20, 40, 0.7); }
+    body { margin: 0; overflow-x: hidden; background: var(--bg-dark); color: white; font-family: 'Segoe UI', sans-serif; }
+    h1 { text-align: center; margin-top: 20px; font-weight: 800; color: var(--primary-neon); text-shadow: 0 0 15px var(--primary-neon); }
     .panel { background: var(--panel-bg); border-radius: 20px; padding: 20px; backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.2); height: 100%; }
     .text-neon { color: var(--primary-neon); text-shadow: 0 0 5px var(--primary-neon); }
-    
-    /* TABLA */
-    .table { color: white !important; margin-top: 10px; }
-    .table th { border-bottom: 2px solid var(--secondary-neon); color: var(--secondary-neon); text-transform: uppercase; font-size: 0.75rem; text-align: center; }
-    .table td { vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; padding: 8px 4px; font-size: 0.9rem; }
-
+    .table { color: white !important; font-size: 0.9rem; }
+    .table th { border-bottom: 2px solid var(--secondary-neon); color: var(--secondary-neon); text-transform: uppercase; text-align: center; }
+    .table td { border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
     .btn-neon { background: transparent; border: 2px solid var(--primary-neon); color: var(--primary-neon); font-weight: bold; transition: 0.3s; }
     .btn-neon:hover { background: var(--primary-neon); color: black; box-shadow: 0 0 20px var(--primary-neon); }
-    .btn-neon:disabled { border-color: #444; color: #444; box-shadow: none; }
-
-    .song-count-badge { background: var(--secondary-neon); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; }
-
-    /* PARTICIPANTES DE LA RONDA */
-    .match-card { background: rgba(0,0,0,0.5); border: 1px solid var(--primary-neon); border-radius: 10px; padding: 10px; margin-top: 10px; }
-    .player-tag { display: inline-block; background: var(--secondary-neon); color: white; padding: 2px 10px; border-radius: 5px; margin: 2px; font-size: 0.85rem; font-weight: bold; }
-
-    /* RULETA */
+    .player-tag { display: inline-block; background: var(--secondary-neon); color: white; padding: 2px 10px; border-radius: 5px; margin: 2px; font-size: 0.85rem; }
+    
+    /* CORRECCIÓN RULETA */
     .overlay { position: fixed; inset: 0; background: radial-gradient(circle, rgba(15,0,30,0.98) 0%, rgba(0,0,0,1) 100%); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 9999; }
     .overlay.active { opacity: 1; pointer-events: all; }
     .scene { width: 100%; height: 80vh; perspective: 2000px; display: flex; justify-content: center; align-items: center; }
-    .carousel { position: relative; width: 220px; height: 300px; transform-style: preserve-3d; transition: transform 12s cubic-bezier(0.1, 0.8, 0.15, 1); }
+    .carousel { position: relative; width: 220px; height: 300px; transform-style: preserve-3d; transition: transform 10s cubic-bezier(0.1, 0.7, 0.1, 1); }
     .card { position: absolute; width: 220px; height: 300px; border-radius: 15px; overflow: hidden; background: #000; border: 2px solid var(--primary-neon); backface-visibility: hidden; }
     .card img { width: 100%; height: 100%; object-fit: cover; }
-    .card .title { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: rgba(0, 0, 0, 0.85); color: white; text-align: center; font-size: 11px; font-weight: bold; }
-    .pointer { position: absolute; top: 10%; left: 50%; transform: translateX(-50%); font-size: 60px; z-index: 10000; color: var(--primary-neon); text-shadow: 0 0 20px var(--primary-neon); }
+    .pointer { position: absolute; top: 12%; left: 50%; transform: translateX(-50%); font-size: 60px; z-index: 10000; color: var(--primary-neon); text-shadow: 0 0 20px var(--primary-neon); }
 </style>
 </head>
 <body>
@@ -53,79 +34,61 @@
 
 <div class="container-fluid px-4 mt-3">
     <div class="row g-3">
-        <!-- IZQUIERDA: JUGADORES -->
+        <!-- COLUMNA IZQUIERDA -->
         <div class="col-lg-4">
             <div class="panel">
-                <h6 class="text-neon mb-3">👤 REGISTRO DE JUGADORES</h6>
+                <h6 class="text-neon mb-3">👤 JUGADORES</h6>
                 <div class="input-group mb-3">
                     <input type="text" id="playerName" class="form-control bg-dark text-white border-secondary" placeholder="Nombre...">
                     <button class="btn btn-neon" onclick="addPlayer()">+</button>
                 </div>
-                
-                <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th class="text-start">Nombre</th>
-                                <th>💃</th>
-                                <th>Pts</th>
-                                <th>Bonif</th>
-                                <th class="text-neon">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboardBody"></tbody>
-                    </table>
-                </div>
-
+                <table class="table table-sm">
+                    <thead><tr><th class="text-start">Nombre</th><th>💃</th><th>Pts</th><th>Total</th></tr></thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
                 <div id="selectionPanel" class="mt-4" style="display:none;">
-                    <h6 class="text-neon">🤝 EMPAREJAMIENTO (4 JUGADORES)</h6>
-                    <button class="btn btn-sm btn-outline-info w-100 mb-2" onclick="pickParticipants()">DECIDIR PARTICIPANTES</button>
-                    <div id="nextMatch" class="match-card text-center">
-                        <small class="text-secondary">Haz clic para elegir quién baila esta ronda</small>
-                    </div>
+                    <h6 class="text-neon">🤝 PRÓXIMA RONDA (MÁX 4)</h6>
+                    <button class="btn btn-sm btn-outline-info w-100 mb-2" onclick="pickParticipants()">DECIDIR POR EQUILIBRIO</button>
+                    <div id="nextMatch" class="p-2 border border-info rounded text-center"></div>
                 </div>
             </div>
         </div>
 
-        <!-- DERECHA: RULETA -->
+        <!-- COLUMNA DERECHA -->
         <div class="col-lg-8">
             <div class="panel">
-                <div class="row align-items-center mb-3">
-                    <div class="col-md-6">
-                        <select id="gameSelect" class="form-select bg-dark text-white border-secondary"></select>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <span id="songCountContainer" class="song-count-badge" style="display:none;">
-                            Disponibles: <span id="songCount">0</span>
-                        </span>
-                    </div>
+                <div class="row mb-3">
+                    <div class="col-md-8"><select id="gameSelect" class="form-select bg-dark text-white border-secondary"></select></div>
+                    <div class="col-md-4 text-end"><span id="songCount" class="badge bg-primary"></span></div>
                 </div>
-
                 <button id="btnSpin" class="btn btn-neon w-100 py-3 mb-4" onclick="spin()" disabled>🎡 GIRAR RULETA</button>
-
                 <div class="text-center">
-                    <h3 id="songName" class="text-neon fw-bold">Selecciona un juego</h3>
-                    <p id="artist" class="text-secondary mb-3"></p>
-                    <img id="cover" class="img-fluid rounded-4 shadow-lg" src="portadas/default.webp" style="max-height: 220px;">
-                    <audio id="audio" controls class="w-100 mt-3" style="max-width: 450px; margin: auto;"></audio>
+                    <h3 id="songName" class="text-neon fw-bold">Esperando...</h3>
+                    <img id="cover" class="img-fluid rounded-4" src="portadas/default.webp" style="max-height: 200px;">
+                    <audio id="audio" controls class="w-100 mt-3"></audio>
                 </div>
 
-                <div id="scoreForm" class="mt-4 p-3 rounded-4" style="display:none; background: rgba(0,0,0,0.4); border: 1px solid var(--secondary-neon);">
-                    <h6 class="text-violet mb-3">⭐ ASIGNAR PUNTOS DE LA RONDA</h6>
-                    <div class="row g-2 align-items-end">
+                <!-- FORMULARIO DE PUNTOS CON BLOQUEO -->
+                <div id="scoreForm" class="mt-4 p-3 rounded-4 border border-secondary" style="display:none; background: rgba(0,0,0,0.5);">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-info m-0">⭐ REGISTRAR RESULTADOS</h6>
+                        <button class="btn btn-sm btn-danger" onclick="resetRoundControls()">Nueva Canción / Limpiar</button>
+                    </div>
+                    <div class="row g-2">
                         <div class="col-md-4">
-                            <select id="playerSelect" class="form-select bg-dark text-white border-secondary"></select>
+                            <select id="playerSelect" class="form-select bg-dark text-white border-info"></select>
                         </div>
                         <div class="col-md-3">
-                            <select id="puestoSelect" class="form-select bg-dark text-white border-secondary">
-                                <option value="5">1° Lugar (+5)</option>
-                                <option value="4">2° Lugar (+4)</option>
-                                <option value="2">3° Lugar (+2)</option>
-                                <option value="1">4° o más (+1)</option>
+                            <select id="puestoSelect" class="form-select bg-dark text-white border-info">
+                                <option value="" selected disabled>Puesto...</option>
+                                <option value="5" data-id="p1">1° Lugar (+5)</option>
+                                <option value="4" data-id="p2">2° Lugar (+4)</option>
+                                <option value="2" data-id="p3">3° Lugar (+2)</option>
+                                <option value="1" data-id="p4">4° o más (+1)</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="estrellasSelect" class="form-select bg-dark text-white border-secondary">
+                            <select id="estrellasSelect" class="form-select bg-dark text-white border-info">
                                 <option value="3">5 Estrellas (+3)</option>
                                 <option value="2">4 Estrellas (+2)</option>
                                 <option value="1">3 Estrellas (+1)</option>
@@ -142,35 +105,26 @@
     </div>
 </div>
 
-<div id="overlay" class="overlay">
-    <div class="pointer">▼</div>
-    <div class="scene"><div id="carousel" class="carousel"></div></div>
-</div>
+<div id="overlay" class="overlay"><div class="pointer">▼</div><div class="scene"><div id="carousel" class="carousel"></div></div></div>
 
 <script>
-let songs = [];
-let filtered = [];
-let history = [];
-let players = [];
+let songs = [], filtered = [], history = [], players = [];
 let currentRotation = 0;
+let usedPuestos = new Set();
+let usedPlayersInRound = new Set();
 
 fetch('canciones.json').then(r => r.json()).then(data => {
     songs = data;
     const select = document.getElementById('gameSelect');
     const games = [...new Set(songs.map(s => s.juego))];
-    select.innerHTML = '<option value="">Elige un Just Dance...</option>';
-    games.forEach(g => {
-        let opt = document.createElement('option');
-        opt.value = g; opt.textContent = g;
-        select.appendChild(opt);
-    });
+    select.innerHTML = '<option value="">Selecciona Just Dance...</option>';
+    games.forEach(g => { select.innerHTML += `<option value="${g}">${g}</option>`; });
 });
 
 document.getElementById('gameSelect').addEventListener('change', e => {
     filtered = songs.filter(s => s.juego === e.target.value && s.portadaDisponible);
-    history = []; // Reiniciar historial al cambiar de juego
-    document.getElementById('songCountContainer').style.display = e.target.value ? 'inline-block' : 'none';
-    document.getElementById('songCount').textContent = filtered.length;
+    history = [];
+    document.getElementById('songCount').textContent = `Disponibles: ${filtered.length}`;
     document.getElementById('btnSpin').disabled = !e.target.value;
     if(e.target.value) createWheel();
 });
@@ -178,60 +132,51 @@ document.getElementById('gameSelect').addEventListener('change', e => {
 function createWheel() {
     const carousel = document.getElementById('carousel');
     carousel.innerHTML = "";
-    const visibleCount = Math.min(filtered.length, 20);
-    const list = filtered.slice(0, visibleCount);
+    const list = filtered.slice(0, 20); // Máximo 20 visuales
     const angle = 360 / list.length;
     list.forEach((song, i) => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.style.transform = `rotateY(${i * angle}deg) translateZ(900px)`;
-        card.innerHTML = `<img src="portadas/${song.version}/${song.codigo}.webp" onerror="this.src='portadas/default.webp'"><div class="title">${song.cancion}</div>`;
+        // El ángulo i*angle define la posición. 0 grados es el frente.
+        card.style.transform = `rotateY(${i * angle}deg) translateZ(800px)`;
+        card.innerHTML = `<img src="portadas/${song.version}/${song.codigo}.webp" onerror="this.src='portadas/default.webp'">`;
         carousel.appendChild(card);
     });
 }
 
 function spin() {
-    if(filtered.length === 0) return;
     const available = filtered.filter(s => !history.includes(s.codigo));
+    if(available.length === 0) history = [];
     
-    // Si se acabaron las canciones, reiniciar historial para no detener el juego
-    if(available.length === 0) { history = []; }
+    const songToPick = available[Math.floor(Math.random() * available.length)];
+    history.push(songToPick.codigo);
 
     const overlay = document.getElementById('overlay');
     const carousel = document.getElementById('carousel');
     overlay.classList.add('active');
 
-    const visibleCount = Math.min(filtered.length, 20);
-    const visibleSongs = filtered.slice(0, visibleCount);
+    const visibleList = filtered.slice(0, 20);
+    const anglePerCard = 360 / visibleList.length;
     
-    // Selección aleatoria
-    const songToPick = available[Math.floor(Math.random() * available.length)];
-    history.push(songToPick.codigo);
-    document.getElementById('songCount').textContent = filtered.length - (history.length % filtered.length);
+    // Si la canción elegida no está en las primeras 20, visualmente elegimos una posición random
+    let targetIndex = visibleList.findIndex(s => s.codigo === songToPick.codigo);
+    if(targetIndex === -1) targetIndex = Math.floor(Math.random() * visibleList.length);
 
-    // Lógica de giro "True Random"
-    const anglePerCard = 360 / visibleCount;
-    const index = visibleSongs.indexOf(songToPick);
-    
-    // Si la canción no está entre las primeras 20 visuales, usamos un índice ficticio para que la ruleta gire
-    const visualIndex = index === -1 ? Math.floor(Math.random() * visibleCount) : index;
-
-    // Aseguramos que el giro sea siempre largo (mínimo 10 vueltas + un offset aleatorio)
-    const extraRandomVueltas = Math.floor(Math.random() * 5) * 360; 
-    const baseVueltas = Math.ceil(currentRotation / 360) * 360;
-    currentRotation = baseVueltas + 3600 + extraRandomVueltas + (visualIndex * anglePerCard);
+    const extraVueltas = (Math.floor(Math.random() * 5) + 8) * 360; 
+    // Para que el índice quede bajo la flecha (0 grados), restamos el ángulo acumulado
+    currentRotation += extraVueltas + (targetIndex * anglePerCard) - (currentRotation % 360);
 
     carousel.style.transform = `rotateY(${-currentRotation}deg)`;
 
     setTimeout(() => {
         showResult(songToPick);
         overlay.classList.remove('active');
-    }, 12000);
+        resetRoundControls(); // Limpiar bloqueos de la ronda anterior
+    }, 10500);
 }
 
 function showResult(song) {
     document.getElementById('songName').textContent = song.cancion;
-    document.getElementById('artist').textContent = song.artista;
     document.getElementById('cover').src = `portadas/${song.version}/${song.codigo}.webp`;
     document.getElementById('audio').src = `musica/${song.version}/${song.codigo}.ogg`;
     document.getElementById('audio').play().catch(()=>{});
@@ -239,57 +184,75 @@ function showResult(song) {
 }
 
 function addPlayer() {
-    const input = document.getElementById('playerName');
-    const name = input.value.trim();
+    const name = document.getElementById('playerName').value.trim();
     if(name && !players.find(p => p.nombre === name)) {
-        players.push({ nombre: name, bailes: 0, ptsPuesto: 0, bonif: 0, total: 0 });
-        input.value = "";
+        players.push({ nombre: name, bailes: 0, pts: 0, bonif: 0, total: 0 });
+        document.getElementById('playerName').value = "";
         updateLeaderboard();
-        if(players.length > 4) document.getElementById('selectionPanel').style.display = 'block';
+        document.getElementById('selectionPanel').style.display = players.length > 4 ? 'block' : 'none';
     }
 }
 
 function updateLeaderboard() {
     const tbody = document.getElementById('leaderboardBody');
-    const select = document.getElementById('playerSelect');
     tbody.innerHTML = "";
-    select.innerHTML = '<option value="">¿Quién bailó?</option>';
     players.sort((a,b) => b.total - a.total).forEach(p => {
-        tbody.innerHTML += `<tr><td class="text-start">${p.nombre}</td><td>${p.bailes}</td><td>${p.ptsPuesto}</td><td>${p.bonif}</td><td class="fw-bold text-neon">${p.total}</td></tr>`;
-        select.innerHTML += `<option value="${p.nombre}">${p.nombre}</option>`;
+        tbody.innerHTML += `<tr><td class="text-start">${p.nombre}</td><td>${p.bailes}</td><td>${p.pts}</td><td class="text-neon fw-bold">${p.total}</td></tr>`;
     });
+    updateSelectors();
 }
 
-// ALGORITMO DE EQUILIBRIO
-function pickParticipants() {
-    if(players.length < 4) return;
-    
-    // Clonamos para no desordenar la tabla original
-    let pool = [...players];
-    
-    // Ordenar por: 1. Menos bailes (Prioridad máxima para igualar), 2. Menos puntos (Para ayudar a remontar)
-    pool.sort((a, b) => {
-        if(a.bailes !== b.bailes) return a.bailes - b.bailes;
-        return a.total - b.total;
+function updateSelectors() {
+    const pSelect = document.getElementById('playerSelect');
+    pSelect.innerHTML = '<option value="" selected disabled>¿Quién bailó?</option>';
+    players.forEach(p => {
+        if(!usedPlayersInRound.has(p.nombre)) {
+            pSelect.innerHTML += `<option value="${p.nombre}">${p.nombre}</option>`;
+        }
     });
 
-    const chosen = pool.slice(0, 4);
-    const container = document.getElementById('nextMatch');
-    container.innerHTML = `<div class="mb-1 small text-info">Participantes sugeridos:</div>`;
-    chosen.forEach(p => {
-        container.innerHTML += `<span class="player-tag">${p.nombre}</span>`;
+    const puestoSelect = document.getElementById('puestoSelect');
+    Array.from(puestoSelect.options).forEach(opt => {
+        if(opt.dataset.id) {
+            opt.disabled = usedPuestos.has(opt.dataset.id);
+        }
     });
 }
 
 function saveScore() {
-    const pName = document.getElementById('playerSelect').value;
-    const pPuesto = parseInt(document.getElementById('puestoSelect').value);
-    const pEstrellas = parseInt(document.getElementById('estrellasSelect').value);
-    if(pName) {
-        const p = players.find(x => x.nombre === pName);
-        p.bailes++; p.ptsPuesto += pPuesto; p.bonif += pEstrellas; p.total = p.ptsPuesto + p.bonif;
-        updateLeaderboard();
+    const name = document.getElementById('playerSelect').value;
+    const puestoOpt = document.getElementById('puestoSelect').selectedOptions[0];
+    const estrellas = parseInt(document.getElementById('estrellasSelect').value);
+
+    if(!name || !puestoOpt.value) return alert("Selecciona jugador y puesto");
+
+    const p = players.find(x => x.nombre === name);
+    p.bailes++;
+    p.pts += parseInt(puestoOpt.value);
+    p.bonif += estrellas;
+    p.total = p.pts + p.bonif;
+
+    // Bloquear para esta canción
+    usedPlayersInRound.add(name);
+    if(puestoOpt.dataset.id !== "p4") { // El 4° o más se puede repetir si hay muchos jugadores
+        usedPuestos.add(puestoOpt.dataset.id);
     }
+
+    updateLeaderboard();
+    document.getElementById('puestoSelect').value = "";
+}
+
+function resetRoundControls() {
+    usedPuestos.clear();
+    usedPlayersInRound.clear();
+    updateSelectors();
+}
+
+function pickParticipants() {
+    let pool = [...players].sort((a, b) => (a.bailes - b.bailes) || (a.total - b.total));
+    const chosen = pool.slice(0, 4);
+    const container = document.getElementById('nextMatch');
+    container.innerHTML = chosen.map(p => `<span class="player-tag">${p.nombre}</span>`).join('');
 }
 </script>
 </body>
