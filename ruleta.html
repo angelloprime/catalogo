@@ -237,41 +237,61 @@ function createWheel() {
 }
 
 function spin() {
-    if(filtered.length === 0) return;
+    if (filtered.length === 0) return;
 
     const overlay = document.getElementById('overlay');
     const carousel = document.getElementById('carousel');
+    
+    // 1. Activar el overlay
     overlay.classList.add('active');
 
-    // CORRECCIÓN LÓGICA: Trabajar solo con las cartas que realmente están en el círculo
-    const visible = Math.min(filtered.length, 20);
-    const list = filtered.slice(0, visible);
+    // 2. Limitar a las canciones que realmente se dibujaron (máximo 20)
+    const visibleCount = Math.min(filtered.length, 20);
+    const visibleSongs = filtered.slice(0, visibleCount);
 
-    if(history.length === list.length){
+    // 3. Control de historial para no repetir dentro de la tanda visible
+    if (history.length >= visibleSongs.length) {
         history = [];
     }
 
-    const available = list.filter(s => !history.includes(s.codigo));
+    const available = visibleSongs.filter(s => !history.includes(s.codigo));
     const random = available[Math.floor(Math.random() * available.length)];
 
     history.push(random.codigo);
     document.getElementById('historyCount').textContent = history.length;
 
-    const angle = 360 / visible;
+    // 4. CÁLCULO DE ROTACIÓN (La clave del problema)
+    const anglePerCard = 360 / visibleCount;
+    const index = visibleSongs.indexOf(random);
     
-    // CORRECCIÓN: Buscar el índice dentro de 'list', no en todo 'filtered'
-    const index = list.indexOf(random); 
-    const finalRotation = 7200 + (index * angle);
+    /**
+     * Explicación del cálculo:
+     * - Queremos que la carta con 'index' quede en el frente (0 grados).
+     * - Para que la carta N venga al frente, el carrusel debe rotar -(index * angle).
+     * - Sumamos 3600 (10 vueltas) para que el giro sea largo y espectacular.
+     * - IMPORTANTE: No sumamos a currentRotation acumulando infinitamente de forma descontrolada,
+     *   sino que calculamos el destino relativo al inicio del giro.
+     */
+    
+    // Calculamos cuántas vueltas completas lleva y sumamos las nuevas
+    const baseVueltas = Math.ceil(currentRotation / 360) * 360;
+    const extraVueltas = 3600; // 10 vueltas de animación
+    const targetAngle = index * anglePerCard;
+    
+    // El nuevo ángulo es: vueltas anteriores + vueltas de regalo + la posición de la carta
+    // Usamos el signo negativo para que el carrusel gire en el sentido correcto hacia la carta
+    currentRotation = baseVueltas + extraVueltas + targetAngle;
 
-    currentRotation += finalRotation;
-
-    // CORRECCIÓN: Todo en una sola línea
+    // 5. Aplicar la transformación
+    // rotateY se aplica negativo (-currentRotation) para que la carta avance hacia el puntero
     carousel.style.transform = `rotateX(-10deg) rotateY(${-currentRotation}deg)`;
 
+    // 6. Mostrar resultados tras la animación (12 segundos según tu CSS)
     setTimeout(() => {
         showResult(random);
     }, 12000);
 
+    // 7. Quitar el overlay un poco después
     setTimeout(() => {
         overlay.classList.remove('active');
     }, 12800);
