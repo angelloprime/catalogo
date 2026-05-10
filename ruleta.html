@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Ruleta 3D Just Dance</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -10,299 +11,217 @@
 <style>
 
 body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top,#252547,#0d0d16);
-  color:white;
-  overflow:hidden;
-  font-family:Arial,sans-serif;
+    margin:0;
+    overflow:hidden;
+    background:#050510;
+    color:white;
+    font-family:Arial;
 }
 
 h1{
-  text-align:center;
-  margin-top:20px;
-  font-weight:bold;
+    text-align:center;
+    margin-top:20px;
+    font-weight:bold;
 }
 
-.main-container{
-  width:100%;
-  max-width:1400px;
-  margin:auto;
-  padding:20px;
+.main{
+    padding:20px;
 }
 
 .panel{
-  background:rgba(255,255,255,0.05);
-  border-radius:25px;
-  padding:25px;
-  backdrop-filter:blur(10px);
+    background:rgba(255,255,255,0.05);
+    border-radius:25px;
+    padding:25px;
+    backdrop-filter:blur(10px);
 }
 
-/* BOTÓN */
-
-.btn-girar{
-  font-size:20px;
-  padding:14px 30px;
-  border-radius:15px;
-  font-weight:bold;
+.btn-spin{
+    font-size:22px;
+    padding:15px 35px;
+    border-radius:15px;
+    font-weight:bold;
 }
 
-/* RESULTADO */
-
-.portada-resultado{
-  width:300px;
-  max-width:100%;
-  border-radius:20px;
-
-  box-shadow:
-    0 0 20px rgba(255,255,255,0.2),
-    0 0 50px rgba(255,152,0,0.2);
-
-  transition:0.3s;
-}
-
-.portada-resultado:hover{
-  transform:scale(1.03);
+.result-img{
+    width:320px;
+    max-width:100%;
+    border-radius:20px;
+    box-shadow:
+        0 0 20px rgba(255,255,255,0.2),
+        0 0 50px rgba(255,170,0,0.25);
 }
 
 /* OVERLAY */
 
 .overlay{
-  position:fixed;
-  inset:0;
-
-  background:rgba(0,0,0,0.93);
-
-  backdrop-filter:blur(12px);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  z-index:9999;
-
-  opacity:0;
-  pointer-events:none;
-
-  transition:0.4s;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition:0.4s;
+    z-index:9999;
 }
 
-.overlay.activo{
-  opacity:1;
-  pointer-events:all;
+.overlay.active{
+    opacity:1;
+    pointer-events:all;
 }
 
 /* ESCENA */
 
 .scene{
-  width:100vw;
-  height:100vh;
+    width:100vw;
+    height:100vh;
+    perspective:1800px;
 
-  perspective:2200px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-/* CARRUSEL */
+/* RULETA */
 
-.carousel3d{
-  position:relative;
+.carousel{
+    position:relative;
 
-  width:700px;
-  height:700px;
+    width:500px;
+    height:500px;
 
-  transform-style:preserve-3d;
-  will-change:transform;
+    transform-style:preserve-3d;
 
-  transition:
-    transform 12s cubic-bezier(0.08,0.8,0.12,1);
+    transition:
+        transform 12s cubic-bezier(0.08,0.82,0.17,1);
+
 }
 
 /* CARTAS */
 
-.card3d{
-  position:absolute;
+.card{
+    position:absolute;
 
-  width:220px;
-  height:300px;
+    width:220px;
+    height:300px;
 
-  left:50%;
-  top:50%;
+    left:140px;
+    top:100px;
 
-  margin-left:-110px;
-  margin-top:-150px;
+    border-radius:20px;
+    overflow:hidden;
 
-  border-radius:20px;
+    background:#111;
 
-  overflow:hidden;
+    border:3px solid rgba(255,255,255,0.12);
 
-  background:#222;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.6),
+        0 0 25px rgba(255,255,255,0.12);
 
-  border:3px solid rgba(255,255,255,0.15);
-
-  transform-style:preserve-3d;
-
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.5),
-    0 0 25px rgba(255,255,255,0.15);
-
-  transition:
-    transform 2s ease,
-    filter 0.3s;
+    transform-style:preserve-3d;
 }
 
-.card3d img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
-.card3d .titulo{
-  position:absolute;
+.card .title{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
 
-  bottom:0;
-  left:0;
-  right:0;
+    padding:8px;
 
-  background:rgba(0,0,0,0.7);
+    background:rgba(0,0,0,0.7);
 
-  font-size:13px;
-  text-align:center;
-
-  padding:8px;
-
-  font-weight:bold;
+    text-align:center;
+    font-size:12px;
+    font-weight:bold;
 }
 
 /* FLECHA */
 
-.flecha{
-  position:absolute;
+.pointer{
+    position:absolute;
 
-  top:40px;
-  left:50%;
+    top:30px;
+    left:50%;
 
-  transform:translateX(-50%);
+    transform:translateX(-50%);
 
-  font-size:70px;
+    font-size:70px;
 
-  z-index:20;
+    z-index:50;
 
-  text-shadow:
-    0 0 20px white,
-    0 0 40px orange;
-}
-
-/* GLOW */
-
-@keyframes pulse{
-
-  0%{
-    filter:
-      drop-shadow(0 0 10px orange);
-  }
-
-  50%{
-    filter:
-      drop-shadow(0 0 30px white);
-  }
-
-  100%{
-    filter:
-      drop-shadow(0 0 10px orange);
-  }
-
-}
-
-.girando{
-  animation:pulse 1s infinite;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:768px){
-
-  .carousel3d{
-    transform:scale(0.55);
-  }
-
-  .card3d{
-    width:160px;
-    height:220px;
-
-    margin-left:-80px;
-    margin-top:-110px;
-  }
-
+    text-shadow:
+        0 0 20px white,
+        0 0 35px orange;
 }
 
 </style>
 </head>
-
 <body>
 
 <h1>🎡 Ruleta 3D Just Dance</h1>
 
-<div class="main-container">
+<div class="container main">
 
-  <div class="row g-4 align-items-center">
+<div class="row g-4">
 
-    <!-- IZQUIERDA -->
+<div class="col-lg-4">
 
-    <div class="col-lg-4">
+<div class="panel text-center">
 
-      <div class="panel text-center">
+<select id="gameSelect" class="form-select mb-4">
+<option value="">Selecciona un juego</option>
+</select>
 
-        <select id="selectorJuego" class="form-select mb-4">
-          <option value="">Selecciona un juego</option>
-        </select>
+<button
+class="btn btn-warning btn-spin"
+onclick="spin()">
+🎡 GIRAR
+</button>
 
-        <button
-          class="btn btn-warning btn-girar"
-          onclick="girar()">
-          🎡 GIRAR
-        </button>
+</div>
 
-      </div>
+</div>
 
-    </div>
+<div class="col-lg-8">
 
-    <!-- DERECHA -->
+<div class="panel text-center">
 
-    <div class="col-lg-8">
+<h2 id="songName">
+🎶 Esperando canción...
+</h2>
 
-      <div class="panel text-center">
+<p id="artist"></p>
 
-        <h2 id="nombre">
-          🎶 Esperando canción...
-        </h2>
+<img
+id="cover"
+class="result-img"
+src="portadas/default.webp">
 
-        <p id="artista"></p>
+<audio
+id="audio"
+controls
+class="w-100 mt-4">
+</audio>
 
-        <img
-          id="portadaResultado"
-          class="portada-resultado mt-3"
-          src="portadas/default.webp">
+<div class="mt-4">
+<strong>Historial:</strong>
+<span id="historyCount">0</span>
+</div>
 
-        <audio
-          id="player"
-          controls
-          class="w-100 mt-4">
-        </audio>
+</div>
 
-        <div class="mt-4">
-          <strong>Historial:</strong>
-          <span id="historialCount">0</span>
-        </div>
+</div>
 
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </div>
 
@@ -310,288 +229,221 @@ h1{
 
 <div id="overlay" class="overlay">
 
-  <div class="flecha">▼</div>
+<div class="pointer">▼</div>
 
-  <div class="scene">
+<div class="scene">
 
-    <div id="carousel3d" class="carousel3d"></div>
+<div id="carousel" class="carousel"></div>
 
-  </div>
+</div>
 
 </div>
 
 <script>
 
-let canciones = [];
-let filtradas = [];
-let historial = [];
+let songs = [];
+let filtered = [];
+let history = [];
 
-let rotacionActual = 0;
-
-/* CARGAR JSON */
+let currentRotation = 0;
 
 fetch('canciones.json')
 .then(r => r.json())
 .then(data => {
 
-  canciones = data;
+    songs = data;
 
-  cargarJuegos();
+    loadGames();
 
 });
 
-/* CARGAR JUEGOS */
+function loadGames(){
 
-function cargarJuegos(){
+    const select =
+        document.getElementById('gameSelect');
 
-  const selector =
-    document.getElementById('selectorJuego');
+    const games =
+        [...new Set(songs.map(s => s.juego))];
 
-  const juegos =
-    [...new Set(canciones.map(c => c.juego))];
+    games.forEach(g => {
 
-  juegos.forEach(j => {
+        const option =
+            document.createElement('option');
 
-    const opt =
-      document.createElement('option');
+        option.value = g;
+        option.textContent = g;
 
-    opt.value = j;
-    opt.textContent = j;
+        select.appendChild(option);
 
-    selector.appendChild(opt);
-
-  });
+    });
 
 }
-
-/* CAMBIO DE JUEGO */
 
 document
-.getElementById('selectorJuego')
+.getElementById('gameSelect')
 .addEventListener('change', e => {
 
-  filtradas = canciones.filter(c =>
+    filtered = songs.filter(s =>
 
-    c.juego === e.target.value &&
-    c.portadaDisponible
+        s.juego === e.target.value &&
+        s.portadaDisponible
 
-  );
+    );
 
-  historial = [];
+    history = [];
 
-  crearCarrusel3D();
+    createWheel();
 
 });
 
-/* CREAR RULETA */
+function createWheel(){
 
-function crearCarrusel3D(){
+    const carousel =
+        document.getElementById('carousel');
 
-  const carousel =
-    document.getElementById('carousel3d');
+    carousel.innerHTML = "";
 
-  carousel.innerHTML = "";
+    if(filtered.length === 0) return;
 
-  if(filtradas.length === 0) return;
+    const visible =
+        Math.min(filtered.length,20);
 
-  const cantidadVisual =
-    Math.min(filtradas.length,20);
+    const list =
+        filtered.slice(0,visible);
 
-  const lista =
-    filtradas.slice(0,cantidadVisual);
+    const angle =
+        360 / list.length;
 
-  const angulo =
-    360 / lista.length;
+    const radius = 650;
 
-  const radioInicial = 80;
+    list.forEach((song,i) => {
 
-  lista.forEach((c,i) => {
+        const card =
+            document.createElement('div');
 
-    const card =
-      document.createElement('div');
+        card.className = 'card';
 
-    card.className = 'card3d';
+        card.style.transform = `
+            rotateY(${i * angle}deg)
+            translateZ(${radius}px)
+        `;
 
-    card.style.transform = `
-      rotateY(${i * angulo}deg)
-      translateZ(${radioInicial}px)
-      rotateY(${-i * angulo}deg)
-    `;
+        card.innerHTML = `
 
-    card.innerHTML = `
+            <img
+            src="portadas/${song.version}/${song.codigo}.webp"
+            onerror="this.src='portadas/default.webp'">
 
-      <img
-        src="portadas/${c.version}/${c.codigo}.webp"
-        onerror="this.src='portadas/default.webp'">
+            <div class="title">
+                ${song.cancion}
+            </div>
 
-      <div class="titulo">
-        ${c.cancion}
-      </div>
+        `;
 
-    `;
+        carousel.appendChild(card);
 
-    carousel.appendChild(card);
-
-  });
+    });
 
 }
 
-/* EXPANDIR RULETA */
+function spin(){
 
-function expandirRuleta(){
+    if(filtered.length === 0) return;
 
-  const cards =
-    document.querySelectorAll('.card3d');
+    const overlay =
+        document.getElementById('overlay');
 
-  const cantidad =
-    cards.length;
+    const carousel =
+        document.getElementById('carousel');
 
-  const angulo =
-    360 / cantidad;
+    overlay.classList.add('active');
 
-  const radioFinal = 520;
+    if(history.length === filtered.length){
 
-  cards.forEach((card,i) => {
+        history = [];
 
-    card.style.transform = `
-      rotateY(${i * angulo}deg)
-      translateZ(${radioFinal}px)
-      rotateY(${-i * angulo}deg)
-    `;
+    }
 
-  });
+    const available =
+        filtered.filter(s =>
 
-}
+            !history.includes(s.codigo)
 
-/* GIRAR */
+        );
 
-function girar(){
+    const random =
+        available[
+            Math.floor(Math.random() * available.length)
+        ];
 
-  if(filtradas.length === 0) return;
+    history.push(random.codigo);
 
-  const overlay =
-    document.getElementById('overlay');
+    document.getElementById(
+        'historyCount'
+    ).textContent = history.length;
 
-  const carousel =
-    document.getElementById('carousel3d');
+    const visible =
+        Math.min(filtered.length,20);
 
-  overlay.classList.add('activo');
+    const angle =
+        360 / visible;
 
-  /* EXPANSIÓN */
+    const index =
+        filtered.indexOf(random);
 
-  expandirRuleta();
+    const finalRotation =
+        7200 + (index * angle);
 
-  /* HISTORIAL */
-
-  if(historial.length === filtradas.length){
-
-    historial = [];
-
-  }
-
-  /* DISPONIBLES */
-
-  const disponibles =
-    filtradas.filter(c =>
-
-      !historial.includes(c.codigo)
-
-    );
-
-  /* RANDOM */
-
-  const random =
-    disponibles[
-      Math.floor(
-        Math.random() *
-        disponibles.length
-      )
-    ];
-
-  historial.push(random.codigo);
-
-  document.getElementById(
-    'historialCount'
-  ).textContent = historial.length;
-
-  const index =
-    filtradas.indexOf(random);
-
-  const angulo =
-    360 / Math.min(filtradas.length,20);
-
-  const grados =
-    7200 + (index * angulo);
-
-  /* PAUSA PARA EXPANSIÓN */
-
-  setTimeout(() => {
-
-    rotacionActual += grados;
-
-    carousel.classList.add('girando');
+    currentRotation += finalRotation;
 
     carousel.style.transform = `
-      rotateX(-18deg)
-      rotateY(${-rotacionActual}deg)
+        rotateX(-10deg)
+        rotateY(${-currentRotation}deg)
     `;
 
-  },500);
+    setTimeout(() => {
 
-  /* RESULTADO */
+        showResult(random);
 
-  setTimeout(() => {
+    },12000);
 
-    carousel.classList.remove('girando');
+    setTimeout(() => {
 
-    mostrarResultado(random);
+        overlay.classList.remove('active');
 
-  },12500);
-
-  /* CERRAR OVERLAY */
-
-  setTimeout(() => {
-
-    overlay.classList.remove('activo');
-
-  },13300);
+    },12800);
 
 }
 
-/* MOSTRAR RESULTADO */
+function showResult(song){
 
-function mostrarResultado(c){
-
-  document.getElementById(
-    'nombre'
-  ).textContent = c.cancion;
-
-  document.getElementById(
-    'artista'
-  ).textContent = c.artista;
-
-  const portada =
     document.getElementById(
-      'portadaResultado'
-    );
+        'songName'
+    ).textContent = song.cancion;
 
-  portada.src =
-    `portadas/${c.version}/${c.codigo}.webp`;
+    document.getElementById(
+        'artist'
+    ).textContent = song.artista;
 
-  portada.onerror = () => {
+    const cover =
+        document.getElementById('cover');
 
-    portada.src =
-      'portadas/default.webp';
+    cover.src =
+        `portadas/${song.version}/${song.codigo}.webp`;
 
-  };
+    cover.onerror = () => {
 
-  const player =
-    document.getElementById('player');
+        cover.src = 'portadas/default.webp';
 
-  player.src =
-    `musica/${c.version}/${c.codigo}.ogg`;
+    };
 
-  player.play().catch(()=>{});
+    const audio =
+        document.getElementById('audio');
+
+    audio.src =
+        `musica/${song.version}/${song.codigo}.ogg`;
+
+    audio.play().catch(()=>{});
 
 }
 
