@@ -19,9 +19,10 @@
         .panel { background: var(--panel-bg); border-radius: 20px; padding: 20px; backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.2); height: 100%; }
         .text-neon { color: var(--primary-neon); text-shadow: 0 0 5px var(--primary-neon); }
         
-        .table { color: white !important; font-size: 0.85rem; }
-        .table th { border-bottom: 2px solid var(--secondary-neon); color: var(--secondary-neon); text-transform: uppercase; text-align: center; }
-        .table td { border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; padding: 10px 5px; }
+        /* TABLA CORREGIDA */
+        .table { color: white !important; font-size: 0.85rem; vertical-align: middle; }
+        .table th { border-bottom: 2px solid var(--secondary-neon); color: var(--secondary-neon); text-transform: uppercase; text-align: center; white-space: nowrap; }
+        .table td { border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; padding: 10px 2px; }
 
         .btn-neon { background: transparent; border: 2px solid var(--primary-neon); color: var(--primary-neon); font-weight: bold; transition: 0.3s; }
         .btn-neon:hover:not(:disabled) { background: var(--primary-neon); color: black; box-shadow: 0 0 20px var(--primary-neon); }
@@ -29,7 +30,7 @@
 
         .player-tag { display: inline-block; background: var(--secondary-neon); color: white; padding: 4px 12px; border-radius: 8px; margin: 3px; font-size: 0.9rem; font-weight: bold; border: 1px solid white; }
 
-        /* RULETA MEJORADA */
+        /* RULETA */
         .overlay { position: fixed; inset: 0; background: radial-gradient(circle, #1a0033 0%, #000 100%); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 9999; }
         .overlay.active { opacity: 1; pointer-events: all; }
         .scene { width: 300px; height: 400px; perspective: 2000px; display: flex; justify-content: center; align-items: center; }
@@ -46,26 +47,29 @@
 
 <div class="container-fluid px-4 mt-3">
     <div class="row g-3">
-        <!-- IZQUIERDA: JUGADORES Y EMPAREJAMIENTO -->
+        <!-- IZQUIERDA: JUGADORES -->
         <div class="col-lg-4">
             <div class="panel">
                 <h6 class="text-neon mb-3">👤 REGISTRO Y RANKING</h6>
                 <div class="input-group mb-3">
-                    <input type="text" id="playerName" class="form-control bg-dark text-white border-secondary" placeholder="Nombre del amigo...">
-                    <button class="btn btn-neon" onclick="addPlayer()">Añadir</button>
+                    <input type="text" id="playerName" class="form-control bg-dark text-white border-secondary" placeholder="Nombre...">
+                    <button class="btn btn-neon" onclick="addPlayer()">+</button>
                 </div>
                 
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th class="text-start">Nombre</th>
-                            <th>💃</th>
-                            <th>Pts</th>
-                            <th class="text-neon">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboardBody"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-start">Nombre</th>
+                                <th>💃</th>
+                                <th>Pts</th>
+                                <th>Bonif</th>
+                                <th class="text-neon">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody"></tbody>
+                    </table>
+                </div>
 
                 <div id="selectionPanel" class="mt-4" style="display:none;">
                     <h6 class="text-neon">🤝 PRÓXIMA RONDA (MÁX 4)</h6>
@@ -85,7 +89,7 @@
                         <select id="gameSelect" class="form-select bg-dark text-white border-secondary"></select>
                     </div>
                     <div class="col-md-5 text-end">
-                        <span id="songCount" class="badge bg-primary px-3 py-2" style="font-size: 0.9rem;"></span>
+                        <span id="songCount" class="badge bg-primary px-3 py-2"></span>
                     </div>
                 </div>
 
@@ -97,13 +101,12 @@
                     <audio id="audio" controls class="w-100 mt-3" style="max-width: 500px; margin: auto;"></audio>
                 </div>
 
-                <!-- REGISTRO DE PUNTOS -->
                 <div id="scoreForm" class="mt-2 p-3 rounded-4 border border-secondary" style="display:none; background: rgba(0,0,0,0.5);">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="text-info m-0">⭐ ASIGNAR PUNTOS</h6>
                         <div>
-                            <button class="btn btn-sm btn-warning me-2" onclick="undoLastScore()">Undo (Deshacer)</button>
-                            <button class="btn btn-sm btn-danger" onclick="resetRoundControls()">Limpiar / Siguiente Canción</button>
+                            <button class="btn btn-sm btn-warning me-2" onclick="undoLastScore()">Deshacer</button>
+                            <button class="btn btn-sm btn-danger" onclick="resetRoundControls()">Siguiente Canción</button>
                         </div>
                     </div>
                     
@@ -138,7 +141,6 @@
     </div>
 </div>
 
-<!-- CAPA DE RULETA -->
 <div id="overlay" class="overlay">
     <div class="pointer">▼</div>
     <div class="scene">
@@ -153,7 +155,6 @@ let usedPuestos = new Set();
 let usedPlayersInRound = new Set();
 let roundHistory = [];
 
-// Cargar datos
 fetch('canciones.json').then(r => r.json()).then(data => {
     songs = data;
     const select = document.getElementById('gameSelect');
@@ -162,7 +163,6 @@ fetch('canciones.json').then(r => r.json()).then(data => {
     games.forEach(g => { select.innerHTML += `<option value="${g}">${g}</option>`; });
 });
 
-// Al cambiar de juego
 document.getElementById('gameSelect').addEventListener('change', e => {
     filtered = songs.filter(s => s.juego === e.target.value && s.portadaDisponible);
     history = [];
@@ -171,7 +171,6 @@ document.getElementById('gameSelect').addEventListener('change', e => {
     if(e.target.value) createWheel();
 });
 
-// Crear visual de la ruleta
 function createWheel() {
     const carousel = document.getElementById('carousel');
     carousel.innerHTML = "";
@@ -186,7 +185,6 @@ function createWheel() {
     });
 }
 
-// Girar con precisión absoluta
 function spin() {
     const available = filtered.filter(s => !history.includes(s.codigo));
     if(available.length === 0) history = [];
@@ -195,7 +193,6 @@ function spin() {
     const visibleList = filtered.slice(0, 20);
     let targetIndex = visibleList.findIndex(s => s.codigo === songToPick.codigo);
 
-    // Si la canción no está en las 20 visuales, la inyectamos dinámicamente
     if(targetIndex === -1) {
         targetIndex = Math.floor(Math.random() * visibleList.length);
         const cards = document.querySelectorAll('.card');
@@ -207,12 +204,10 @@ function spin() {
     overlay.classList.add('active');
 
     const anglePerCard = 360 / visibleList.length;
-    const vueltas = 12 * 360; // 12 vueltas para emoción
+    const vueltas = 12 * 360;
     const targetAngle = targetIndex * anglePerCard;
     
-    // Resetear base y sumar giro inverso para que el target llegue al centro (0deg)
     currentRotation = (Math.ceil(currentRotation / 360) * 360) + vueltas - targetAngle;
-
     carousel.style.transform = `rotateY(${currentRotation}deg)`;
 
     setTimeout(() => {
@@ -231,7 +226,6 @@ function showResult(song) {
     if(players.length > 0) document.getElementById('scoreForm').style.display = 'block';
 }
 
-// Lógica de Jugadores
 function addPlayer() {
     const name = document.getElementById('playerName').value.trim();
     if(name && !players.find(p => p.nombre === name)) {
@@ -246,7 +240,14 @@ function updateLeaderboard() {
     const tbody = document.getElementById('leaderboardBody');
     tbody.innerHTML = "";
     players.sort((a,b) => b.total - a.total).forEach(p => {
-        tbody.innerHTML += `<tr><td class="text-start">${p.nombre}</td><td>${p.bailes}</td><td>${p.pts}</td><td class="text-neon fw-bold">${p.total}</td></tr>`;
+        // COLUMNA BONIF AÑADIDA AQUÍ
+        tbody.innerHTML += `<tr>
+            <td class="text-start">${p.nombre}</td>
+            <td>${p.bailes}</td>
+            <td>${p.pts}</td>
+            <td class="text-info">${p.bonif}</td>
+            <td class="text-neon fw-bold">${p.total}</td>
+        </tr>`;
     });
     updateSelectors();
 }
@@ -317,7 +318,6 @@ function resetRoundControls() {
     updateSelectors();
 }
 
-// Algoritmo de equilibrio para elegir participantes
 function pickParticipants() {
     let pool = [...players].sort((a, b) => (a.bailes - b.bailes) || (a.total - b.total));
     const chosen = pool.slice(0, 4);
